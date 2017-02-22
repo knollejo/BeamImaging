@@ -39,7 +39,7 @@ public:
 	      RooAbsReal& _yWidthM2,
 	      RooAbsReal& _yWidthW2,
           RooAbsReal& _vtxRes);
-  TripleGauss_V1(const MyPdfV3_Ext& other, const char* name=0);
+  TripleGauss_V1(const TripleGauss_V1& other, const char* name=0);
   virtual TObject* clone(const char* newname) const { return new TripleGauss_V1(*this,newname); }
   inline virtual ~TripleGauss_V1() { }
 
@@ -66,13 +66,6 @@ protected:
   RooRealProxy  yWidthM2;
   RooRealProxy  yWidthW2;
   RooRealProxy  vtxRes;
-
-  RooFormulaVar  wN1;
-  RooFormulaVar  wM1;
-  RooFormulaVar  wW1;
-  RooFormulaVar  wN2;
-  RooFormulaVar  wM2;
-  RooFormulaVar  wW2;
 
   TF2 *fitFuncN1N2 = new TF2("fitFuncN1N2","[4]*1./(2*3.14159*TMath::Sqrt([3]))*TMath::Exp(-0.5*(TMath::Power(x[0],2.0)*[0]+TMath::Power(x[1],2.0)*[1]+2*[2]*x[0]*x[1]))",-30,30,-30,30);
   TF2 *fitFuncN1M2 = new TF2("fitFuncN1M2","[4]*1./(2*3.14159*TMath::Sqrt([3]))*TMath::Exp(-0.5*(TMath::Power(x[0],2.0)*[0]+TMath::Power(x[1],2.0)*[1]+2*[2]*x[0]*x[1]))",-30,30,-30,30);

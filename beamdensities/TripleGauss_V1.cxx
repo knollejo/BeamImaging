@@ -59,13 +59,7 @@ ClassImp(TripleGauss_V1)
     yWidthN2 ("yWidthN2","yWidthN2",this,_yWidthN2),
     yWidthM2 ("yWidthM2","yWidthM2",this,_yWidthM2),
     yWidthW2 ("yWidthW2","yWidthW2",this,_yWidthW2),
-    vtxRes ("vtxRes","vtxRes",this,_vtxRes),
-    wN1 ("wN1","sin(theta1)*sin(theta1)*cos(phi1)*cos(phi1)",theta1,phi1),
-    wM1 ("wM1","sin(theta1)*sin(theta1)*sin(phi1)*sin(phi1)",theta1,phi1),
-    wW1 ("wW1","cos(theta1)*cos(theta1)",theta1,phi1),
-    wN2 ("wN2","sin(theta2)*sin(theta2)*cos(phi2)*cos(phi2)",theta2,phi2),
-    wM2 ("wM2","sin(theta2)*sin(theta2)*sin(phi2)*sin(phi2)",theta2,phi2),
-    wW2 ("wW2","cos(theta2)*cos(theta2)",theta2,phi2)
+    vtxRes ("vtxRes","vtxRes",this,_vtxRes)
  {
  }
 
@@ -92,13 +86,7 @@ ClassImp(TripleGauss_V1)
     yWidthN2("yWidthN2",this,other.yWidthN2),
     yWidthM2("yWidthM2",this,other.yWidthM2),
     yWidthW2("yWidthW2",this,other.yWidthW2),
-    vtxRes("vtxRes",this,other.vtxRes),
-    wN1("wN1","sin(theta1)*sin(theta1)*cos(phi1)*cos(phi1)",theta1,phi1),
-    wM1("wM1","sin(theta1)*sin(theta1)*sin(phi1)*sin(phi1)",theta1,phi1),
-    wW1("wW1","cos(theta1)*cos(theta1)",theta1,phi1),
-    wN2("wN2","sin(theta2)*sin(theta2)*cos(phi2)*cos(phi2)",theta2,phi2),
-    wM2("wM2","sin(theta2)*sin(theta2)*sin(phi2)*sin(phi2)",theta2,phi2),
-    wW2("wW2","cos(theta2)*cos(theta2)",theta2,phi2)
+    vtxRes("vtxRes",this,other.vtxRes)
  {
  }
 
@@ -107,6 +95,13 @@ ClassImp(TripleGauss_V1)
  Double_t TripleGauss_V1::evaluate() const
  {
    // ENTER EXPRESSION IN TERMS OF VARIABLE ARGUMENTS HERE
+
+   double wN1 = sin(theta1)*sin(theta1)*cos(phi1)*cos(phi1);
+   double wM1 = sin(theta1)*sin(theta1)*sin(phi1)*sin(phi1);
+   double wW1 = cos(theta1)*cos(theta1);
+   double wN2 = sin(theta2)*sin(theta2)*cos(phi2)*cos(phi2);
+   double wM2 = sin(theta2)*sin(theta2)*sin(phi2)*sin(phi2);
+   double wW2 = cos(theta2)*cos(theta2);
 
    TMatrix beamN1(2,2);
    beamN1(0,0) = TMath::Power(xWidthN1,2.0);
@@ -169,55 +164,55 @@ ClassImp(TripleGauss_V1)
    fitFuncN1N2->SetParameter(1,sigmaN1N2FinalInv(1,1));
    fitFuncN1N2->SetParameter(2,sigmaN1N2FinalInv(1,0));
    fitFuncN1N2->SetParameter(3,(sigmaN1N2FinalInv.Invert()).Determinant());
-   fitFuncN1N2->SetParameter(4,w1N*w2N);
+   fitFuncN1N2->SetParameter(4,wN1*wN2);
 
    fitFuncN1M2->SetParameter(0,sigmaN1M2FinalInv(0,0));
    fitFuncN1M2->SetParameter(1,sigmaN1M2FinalInv(1,1));
    fitFuncN1M2->SetParameter(2,sigmaN1M2FinalInv(1,0));
    fitFuncN1M2->SetParameter(3,(sigmaN1M2FinalInv.Invert()).Determinant());
-   fitFuncN1M2->SetParameter(4,w1N*w2M);
+   fitFuncN1M2->SetParameter(4,wN1*wM2);
 
    fitFuncN1W2->SetParameter(0,sigmaN1W2FinalInv(0,0));
    fitFuncN1W2->SetParameter(1,sigmaN1W2FinalInv(1,1));
    fitFuncN1W2->SetParameter(2,sigmaN1W2FinalInv(1,0));
    fitFuncN1W2->SetParameter(3,(sigmaN1W2FinalInv.Invert()).Determinant());
-   fitFuncN1W2->SetParameter(4,w1N*w2W);
+   fitFuncN1W2->SetParameter(4,wN1*wW2);
 
    fitFuncM1N2->SetParameter(0,sigmaM1N2FinalInv(0,0));
    fitFuncM1N2->SetParameter(1,sigmaM1N2FinalInv(1,1));
    fitFuncM1N2->SetParameter(2,sigmaM1N2FinalInv(1,0));
    fitFuncM1N2->SetParameter(3,(sigmaM1N2FinalInv.Invert()).Determinant());
-   fitFuncM1N2->SetParameter(4,w1M*w2N);
+   fitFuncM1N2->SetParameter(4,wM1*wN2);
 
    fitFuncM1M2->SetParameter(0,sigmaM1M2FinalInv(0,0));
    fitFuncM1M2->SetParameter(1,sigmaM1M2FinalInv(1,1));
    fitFuncM1M2->SetParameter(2,sigmaM1M2FinalInv(1,0));
    fitFuncM1M2->SetParameter(3,(sigmaM1M2FinalInv.Invert()).Determinant());
-   fitFuncM1M2->SetParameter(4,w1M*w2M);
+   fitFuncM1M2->SetParameter(4,wM1*wM2);
 
    fitFuncM1W2->SetParameter(0,sigmaM1W2FinalInv(0,0));
    fitFuncM1W2->SetParameter(1,sigmaM1W2FinalInv(1,1));
    fitFuncM1W2->SetParameter(2,sigmaM1W2FinalInv(1,0));
    fitFuncM1W2->SetParameter(3,(sigmaM1W2FinalInv.Invert()).Determinant());
-   fitFuncM1W2->SetParameter(4,w1M*w2W);
+   fitFuncM1W2->SetParameter(4,wM1*wW2);
 
    fitFuncW1N2->SetParameter(0,sigmaW1N2FinalInv(0,0));
    fitFuncW1N2->SetParameter(1,sigmaW1N2FinalInv(1,1));
    fitFuncW1N2->SetParameter(2,sigmaW1N2FinalInv(1,0));
    fitFuncW1N2->SetParameter(3,(sigmaW1N2FinalInv.Invert()).Determinant());
-   fitFuncW1N2->SetParameter(4,w1W*w2N);
+   fitFuncW1N2->SetParameter(4,wW1*wN2);
 
    fitFuncW1M2->SetParameter(0,sigmaW1M2FinalInv(0,0));
    fitFuncW1M2->SetParameter(1,sigmaW1M2FinalInv(1,1));
    fitFuncW1M2->SetParameter(2,sigmaW1M2FinalInv(1,0));
    fitFuncW1M2->SetParameter(3,(sigmaW1M2FinalInv.Invert()).Determinant());
-   fitFuncW1M2->SetParameter(4,w1W*w2M);
+   fitFuncW1M2->SetParameter(4,wW1*wM2);
 
    fitFuncW1W2->SetParameter(0,sigmaW1W2FinalInv(0,0));
    fitFuncW1W2->SetParameter(1,sigmaW1W2FinalInv(1,1));
    fitFuncW1W2->SetParameter(2,sigmaW1W2FinalInv(1,0));
    fitFuncW1W2->SetParameter(3,(sigmaW1W2FinalInv.Invert()).Determinant());
-   fitFuncW1W2->SetParameter(4,w1W*w2W);
+   fitFuncW1W2->SetParameter(4,wW1*wW2);
 
    double combVal = fitFuncN1N2->Eval(xVar-x0,yVar-y0)
                   + fitFuncN1M2->Eval(xVar-x0,yVar-y0)
