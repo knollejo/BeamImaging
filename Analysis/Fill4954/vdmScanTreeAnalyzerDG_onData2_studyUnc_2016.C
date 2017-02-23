@@ -193,9 +193,11 @@ return product;
 void vdmScanTreeAnalyzerDG_onData2_studyUnc_2016()
 {
 
+    double scaling = 0.00458;
+
   //TFile *f = TFile::Open("testNEW8_ext.root");
   //TFile *f = TFile::Open("../vdm_ReRecoAnalysis/newBeamImaging.root");
-TFile *f = TFile::Open("2016Scans_v5.root");
+//TFile *f = TFile::Open("2016Scans_v5.root");
 
 
 
@@ -341,7 +343,7 @@ RooRealVar yWidthN1("yWidthN1","yWidthN1",1.3,3.0) ;
   RooRealVar rho_W2("rho_W2","rho_W2",-0.48,0.48) ;
   RooRealVar w2("w2","w2",0.0,1.0) ;
 
-  RooRealVar vtxRes("vtxRes","vtxRes",0.445) ;
+  RooRealVar vtxRes("vtxRes","vtxRes",0.00356/scaling) ;
   vtxRes.setConstant();
 
   RooRealVar xWidthRes("xWidthRes","xWidthRes",0.62,0.62) ;
@@ -592,20 +594,20 @@ TH1F *xwidth1N_error_h = new TH1F("xwidth1N_error_h","xwidth1N_error_h",200,0.0,
   TH2D* resX2 = (TH2D*) hdataX2->Clone();
   TH2D* resY2 = (TH2D*) hdataY2->Clone();*/
 
-  TH2D* resX1 = new TH2D("BeamImageX1","BeamImageX1",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
-  TH2D* resY1 = new TH2D("BeamImageY1","BeamImageY1",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
-  TH2D* resX2 = new TH2D("BeamImageX2","BeamImageX2",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
-  TH2D* resY2 = new TH2D("BeamImageY2","BeamImageY2",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
+  TH2D* resX1 = new TH2D("BeamImageX1","BeamImageX1",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
+  TH2D* resY1 = new TH2D("BeamImageY1","BeamImageY1",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
+  TH2D* resX2 = new TH2D("BeamImageX2","BeamImageX2",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
+  TH2D* resY2 = new TH2D("BeamImageY2","BeamImageY2",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
 
-  TH2D* dataHistX1 = new TH2D("dataHistX1","dataHistX1",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
-  TH2D* dataHistY1 = new TH2D("dataHistY1","dataHistY1",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
-  TH2D* dataHistX2 = new TH2D("dataHistX2","dataHistX2",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
-  TH2D* dataHistY2 = new TH2D("dataHistY2","dataHistY2",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
+  TH2D* dataHistX1 = new TH2D("dataHistX1","dataHistX1",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
+  TH2D* dataHistY1 = new TH2D("dataHistY1","dataHistY1",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
+  TH2D* dataHistX2 = new TH2D("dataHistX2","dataHistX2",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
+  TH2D* dataHistY2 = new TH2D("dataHistY2","dataHistY2",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
 
-  TH2D* modelHistX1 = new TH2D("modelHistX1","modelHistX1",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
-  TH2D* modelHistY1 = new TH2D("modelHistY1","modelHistY1",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
-  TH2D* modelHistX2 = new TH2D("modelHistX2","modelHistX2",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
-  TH2D* modelHistY2 = new TH2D("modelHistY2","modelHistY2",nbins,-10*0.00508,10*0.00508,nbins,-10*0.00508,10*0.00508);
+  TH2D* modelHistX1 = new TH2D("modelHistX1","modelHistX1",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
+  TH2D* modelHistY1 = new TH2D("modelHistY1","modelHistY1",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
+  TH2D* modelHistX2 = new TH2D("modelHistX2","modelHistX2",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
+  TH2D* modelHistY2 = new TH2D("modelHistY2","modelHistY2",nbins,-10*scaling,10*scaling,nbins,-10*scaling,10*scaling);
 
   double chi2Y1 = 0.;
   double chi2Y2 = 0.;
