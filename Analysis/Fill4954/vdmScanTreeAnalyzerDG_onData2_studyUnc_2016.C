@@ -42,10 +42,10 @@
 #include "RooFFTConvPdf.h"
 #include "RooAddPdf.h"
 //#include "RooWorkspace.h"
-#include "BeamImaging/TMVA/Tools.h"
 #include "TStyle.h"
 //#include "TMVA/Tools.h"
-#include "BeamImaging/TMVA/Reader.h"
+#include "../../TMVA-v4.2.0/TMVA/Reader.h"
+#include "../../TMVA-v4.2.0/TMVA/Tools.h"
 using namespace RooFit;
 
 
@@ -201,7 +201,9 @@ TFile *f = TFile::Open("2016Scans_v5.root");
 
   //TFile *f = TFile::Open("../vdm_ReRecoAnalysis/newbemimagingfine.root");
 
-   TString suff="Improved_addOrigin_2016_newResolution";
+   TFile *f = TFile::Open("/eos/cms/store/user/jsalfeld/vdmScan_2016ReRecoJan/mergedJan172016.root");
+
+   TString suff="StronRescale";
 
 //TFile *f = TFile::Open("testNEW8_coarse_ext.root");
    //TString bunchStr[5] = {"51","771","1631","2211","2674"};
@@ -248,7 +250,7 @@ TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent" );
   reader->AddVariable("corr2W_fit",&corr2W_fitf );
   reader->AddVariable("weight2_fit",&weight2_fitf );
 
-  reader->BookMVA( "MLP", "../TMVA-v4.2.0/test/weights/TMVARegression_MLP.weights.xml" );
+  reader->BookMVA( "MLP", "../../TMVA-v4.2.0/test/weights/TMVARegression_MLP.weights.xml" );
 
 
 

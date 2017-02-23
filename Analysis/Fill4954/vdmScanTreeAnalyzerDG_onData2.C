@@ -352,6 +352,8 @@ RooRealVar yWidthN1("yWidthN1","yWidthN1",1.3,3.0) ;
   RooRealVar rho_W2("rho_W2","rho_W2",-0.48,0.48) ;
   RooRealVar w2("w2","w2",0.0,1.0) ;
 
+  RooRealVar vtxRes("vtxRes","vtxRes",0.445) ;
+  vtxRes.setConstant();
   RooRealVar xWidthRes("xWidthRes","xWidthRes",0.62,0.62) ;
   RooRealVar yWidthRes("yWidthRes","yWidthRes",0.62,0.62) ;
   RooRealVar meanRes("meanRes","meanRes",0.0,0.0) ;
@@ -362,10 +364,10 @@ RooRealVar yWidthN1("yWidthN1","yWidthN1",1.3,3.0) ;
   RooGaussian resY("resY","resY",yVar,meanRes,yWidthRes);
  
 
-  MyPdfV3_Ext  beam1RestVerticesUnfold_XScan("beam1RestVerticesUnfold_Xscan","beam1RestVerticesUnfold_Xscan",xVar,yVar,x0_1,y0_1,w1,rho_N1,xWidthN1,yWidthN1,rho_W1,xWidthW1,yWidthW1,w2,yWidthN2,yWidthW2);
-  MyPdfV4_Ext  beam1RestVerticesUnfold_YScan("beam1RestVerticesUnfold_Yscan","beam1RestVerticesUnfold_Yscan",xVar,yVar,x0_2,y0_2,w1,rho_N1,xWidthN1,yWidthN1,rho_W1,xWidthW1,yWidthW1,w2,xWidthN2,xWidthW2);
-  MyPdfV3_Ext  beam2RestVerticesUnfold_XScan("beam2RestVerticesUnfold_Xscan","beam2RestVerticesUnfold_Xscan",xVar,yVar,x0_12,y0_12,w2,rho_N2,xWidthN2,yWidthN2,rho_W2,xWidthW2,yWidthW2,w1,yWidthN1,yWidthW1);
-  MyPdfV4_Ext  beam2RestVerticesUnfold_YScan("beam2RestVerticesUnfold_Yscan","beam2RestVerticesUnfold_Yscan",xVar,yVar,x0_22,y0_22,w2,rho_N2,xWidthN2,yWidthN2,rho_W2,xWidthW2,yWidthW2,w1,xWidthN1,xWidthW1);
+  MyPdfV3_Ext  beam1RestVerticesUnfold_XScan("beam1RestVerticesUnfold_Xscan","beam1RestVerticesUnfold_Xscan",xVar,yVar,x0_1,y0_1,w1,rho_N1,xWidthN1,yWidthN1,rho_W1,xWidthW1,yWidthW1,w2,yWidthN2,yWidthW2,vtxRes);
+  MyPdfV4_Ext  beam1RestVerticesUnfold_YScan("beam1RestVerticesUnfold_Yscan","beam1RestVerticesUnfold_Yscan",xVar,yVar,x0_2,y0_2,w1,rho_N1,xWidthN1,yWidthN1,rho_W1,xWidthW1,yWidthW1,w2,xWidthN2,xWidthW2,vtxRes);
+  MyPdfV3_Ext  beam2RestVerticesUnfold_XScan("beam2RestVerticesUnfold_Xscan","beam2RestVerticesUnfold_Xscan",xVar,yVar,x0_12,y0_12,w2,rho_N2,xWidthN2,yWidthN2,rho_W2,xWidthW2,yWidthW2,w1,yWidthN1,yWidthW1,vtxRes);
+  MyPdfV4_Ext  beam2RestVerticesUnfold_YScan("beam2RestVerticesUnfold_Yscan","beam2RestVerticesUnfold_Yscan",xVar,yVar,x0_22,y0_22,w2,rho_N2,xWidthN2,yWidthN2,rho_W2,xWidthW2,yWidthW2,w1,xWidthN1,xWidthW1,vtxRes);
 
 
 
