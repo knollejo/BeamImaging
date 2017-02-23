@@ -109,10 +109,10 @@ ClassImp(TripleGauss_V2)
    beamN1(1,0) = rho_N1*xWidthN1*yWidthN1;
    beamN1(0,1) = rho_N1*xWidthN1*yWidthN1;
    TMatrix beamM1(2,2);
-   beamN1(0,0) = TMath::Power(xWidthM1,2.0);
-   beamN1(1,1) = TMath::Power(yWidthM1,2.0);
-   beamN1(1,0) = rho_M1*xWidthM1*yWidthM1;
-   beamN1(0,1) = rho_M1*xWidthM1*yWidthM1;
+   beamM1(0,0) = TMath::Power(xWidthM1,2.0);
+   beamM1(1,1) = TMath::Power(yWidthM1,2.0);
+   beamM1(1,0) = rho_M1*xWidthM1*yWidthM1;
+   beamM1(0,1) = rho_M1*xWidthM1*yWidthM1;
    TMatrix beamW1(2,2);
    beamW1(0,0) = TMath::Power(xWidthW1,2.0);
    beamW1(1,1) = TMath::Power(yWidthW1,2.0);
@@ -127,10 +127,10 @@ ClassImp(TripleGauss_V2)
    beamN2MargInv(0,1) = 0.;
    beamN2MargInv(1,0) = 0.;
    TMatrix beamM2MargInv(2,2);
-   beamN2MargInv(0,0) = 1./TMath::Power(yWidthM2,2.0);
-   beamN2MargInv(1,1) = 0.;
-   beamN2MargInv(0,1) = 0.;
-   beamN2MargInv(1,0) = 0.;
+   beamM2MargInv(0,0) = 1./TMath::Power(yWidthM2,2.0);
+   beamM2MargInv(1,1) = 0.;
+   beamM2MargInv(0,1) = 0.;
+   beamM2MargInv(1,0) = 0.;
    TMatrix beamW2MargInv(2,2);
    beamW2MargInv(0,0) = 1./TMath::Power(yWidthW2,2.0);
    beamW2MargInv(1,1) = 0.;
@@ -225,4 +225,4 @@ ClassImp(TripleGauss_V2)
                   + fitFuncW1W2->Eval(xVar-x0,yVar-y0);
 
    return combVal;
- }
+}
