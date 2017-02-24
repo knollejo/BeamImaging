@@ -49,7 +49,7 @@
 using namespace RooFit;
 
 
-Double_t beamMultDGt(Double_t *x,Double_t *par)
+Double_t beamMultSGt(Double_t *x,Double_t *par)
 {
   Double_t arg = 0;
   Double_t pi = 3.1415926;
@@ -190,7 +190,7 @@ return product;
 }
 
 
-void vdmScanTreeAnalyzerDG_onData2_studyUnc_2016()
+void vdmScanTreeAnalyzerSG_onData2_studyUnc_2016()
 {
 
     double scaling = 0.00458;
@@ -337,7 +337,7 @@ TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent" );
   RooFormulaVar yWidthW1("yWidthW1","yWidthN1+yWidth1Diff",RooArgSet(yWidthN1,yWidth1Diff));
   RooFormulaVar xWidthW1("xWidthW1","xWidthN1+xWidth1Diff",RooArgSet(xWidthN1,xWidth1Diff));
   RooRealVar rho_W1("rho_W1","rho_W1",-0.48,0.48) ;
-  RooRealVar w1("w1","w1",0.0,1.0) ;
+  RooRealVar w1("w1","w1",-1.0,0.0) ;
 
   RooRealVar yWidthN2("yWidthN2","yWidthN2",1.3,3.0) ;
   RooRealVar xWidthN2("xWidthN2","xWidthN2",1.3,3.0) ;
@@ -349,7 +349,7 @@ TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent" );
   RooFormulaVar yWidthW2("yWidthW2","yWidthN2+yWidth2Diff",RooArgSet(yWidthN2,yWidth2Diff));
   RooFormulaVar xWidthW2("xWidthW2","xWidthN2+xWidth2Diff",RooArgSet(xWidthN2,xWidth2Diff));
   RooRealVar rho_W2("rho_W2","rho_W2",-0.48,0.48) ;
-  RooRealVar w2("w2","w2",0.0,1.0) ;
+  RooRealVar w2("w2","w2",-1.0,0.0) ;
 
   RooRealVar vtxRes("vtxRes","vtxRes",0.00356/scaling) ;
   vtxRes.setConstant();
@@ -396,7 +396,7 @@ TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent" );
 
 
 
-TF2 *multBeam = new TF2("multBeam",beamMultDGt,-30,30,-30,30,18);
+TF2 *multBeam = new TF2("multBeam",beamMultSGt,-30,30,-30,30,18);
 
 
 
@@ -451,7 +451,7 @@ std::cout<<"Overlap-Integral Fit Regression: "<<overlapReg<<std::endl;
 
 TRandom3 rand;
   rand.SetSeed(0);
- TFile *fAna = new TFile("DataAnalysisBunch"+bunchStr[i]+"DG_new_"+suff+".root","recreate");
+ TFile *fAna = new TFile("DataAnalysisBunch"+bunchStr[i]+"SG_new_"+suff+".root","recreate");
   TH1F *integ = new TH1F("integ","Overlap Distribution",1000,0.,1.);
 
 TH1F *overlapInt_h = new TH1F("overlapInt","overlapInt",200,0.0,1.);
@@ -475,13 +475,13 @@ TH1F *xwidth1N_h = new TH1F("xwidth1N_h","xwidth1N_h",200,0.5,6.);
    TH1F *ywidth2W_h = new TH1F("ywidth2W_h","ywidth2W_h",200,0.5,6.);
  ywidth2W_h->Fill(yWidthW2.getValV());
 
-   TH1F *weight1N_h = new TH1F("weight1N_h","weight1N_h",200,0.0,1.);
+   TH1F *weight1N_h = new TH1F("weight1N_h","weight1N_h",200,-1.0,0.0);
    weight1N_h->Fill(w1.getValV());
-   TH1F *weight1W_h = new TH1F("weight1W_h","weight1W_h",200,0.0,1.);
+   TH1F *weight1W_h = new TH1F("weight1W_h","weight1W_h",200,1.0,2.0);
    weight1W_h->Fill(1.0-w1.getValV());
-   TH1F *weight2N_h = new TH1F("weight2N_h","weight2N_h",200,0.0,1.);
+   TH1F *weight2N_h = new TH1F("weight2N_h","weight2N_h",200,-1.0,0.0);
    weight2N_h->Fill(w2.getValV());
-   TH1F *weight2W_h = new TH1F("weight2W_h","weight2W_h",200,0.0,1.);
+   TH1F *weight2W_h = new TH1F("weight2W_h","weight2W_h",200,1.0,2.0);
    weight2W_h->Fill(1.0-w2.getValV());
 
    TH1F *rho1N_h = new TH1F("rho1N_h","rho1N_h",200,-0.5,0.5);
