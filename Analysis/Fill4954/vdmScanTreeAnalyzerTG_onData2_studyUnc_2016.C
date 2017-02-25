@@ -102,7 +102,7 @@ Double_t beamMultTG(Double_t *x,Double_t *par)
 }
 
 
-void vdmScanTreeAnalyzerTG_onData2_studyUnc_2016()
+void vdmScanTreeAnalyzerTG_onData2_studyUnc_2016(TString bx)
 {
 
     double scaling = 0.00458;
@@ -121,7 +121,8 @@ void vdmScanTreeAnalyzerTG_onData2_studyUnc_2016()
 
 //TFile *f = TFile::Open("testNEW8_coarse_ext.root");
    //TString bunchStr[5] = {"51","771","1631","2211","2674"};
-TString bunchStr[5] = {"41","281","872","1783","2063"};
+//TString bunchStr[5] = {"41","281","872","1783","2063"};
+TString bunchStr[1] = {bx};
  gStyle->SetOptStat(0);
 
 
@@ -167,8 +168,8 @@ TMVA::Reader *reader = new TMVA::Reader( "!Color:!Silent" );*>
   reader->BookMVA( "MLP", "../../TMVA-v4.2.0/test/weights/TMVARegression_MLP.weights.xml" );
 */
 
-
- for(int i=0;i<5;i++){
+int i = 0;
+ //for(int i=0;i<5;i++){
 
  TH2F *Beam2MoveX_Add = (TH2F*) f->Get("Beam2MoveX_bunch"+bunchStr[i]+"Add");
  TH2F *Beam2MoveY_Add = (TH2F*) f->Get("Beam2MoveY_bunch"+bunchStr[i]+"Add");
@@ -763,5 +764,5 @@ cout<<"chi2 Y2: "<<(chi2Y2)<<endl;
 
   fAna->Write();
 
- }
+ //}
 }
