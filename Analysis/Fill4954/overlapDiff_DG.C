@@ -120,27 +120,6 @@ void overlapDiff_DG(TString suffix)
     r.SetSeed(0);
     int scansteps = 25.;
     double scaling = 0.00458;
-    TFile *fAna = new TFile("overlapDiffZ_TOYS_2016_"+suffix+".root","recreate");
-
-    TH1F *overDiff = new TH1F("overDiff","VdM Scan Measured vs True Overlap",200,-0.1,0.1);
-    TH1F *capSigAeffDiff = new TH1F("capSigAeffDiff","VdM Scan Measured vs True Overlap",360,0.,0.12);
-
-    double in_yWidth1N ;
-    double in_xWidth1N ;
-    double in_corr1N ;
-    double in_yWidth1W ;
-    double in_xWidth1W ;
-    double in_corr1W ;
-    double in_weight1 ;
-    double in_yWidth2N ;
-    double in_xWidth2N;
-    double in_corr2N ;
-    double in_yWidth2W ;
-    double in_xWidth2W ;
-    double in_corr2W ;
-    double in_weight2 ;
-    double in_overlapTrueTree;
-
     TFile *f = TFile::Open("DataAnalysisBunch"+suffix+"_new_StronRescale.root");
 
     TH1F *xwidth1W_h=(TH1F*) f->Get("xwidth1W_h");
@@ -179,21 +158,21 @@ void overlapDiff_DG(TString suffix)
     TH2F *weight1N_error_h=(TH2F*) f->Get("weight1N_error_h");
     TH2F *weight2N_error_h=(TH2F*) f->Get("weight2N_error_h");
 
-    in_yWidth1N = ywidth1N_h->GetMean();
-    in_xWidth1N = xwidth1N_h->GetMean();
-    in_corr1N = rho1N_h->GetMean();
-    in_yWidth1W = ywidth1W_h->GetMean();
-    in_xWidth1W = xwidth1W_h->GetMean();
-    in_corr1W =rho1W_h->GetMean();
-    in_weight1N =weight1N_h->GetMean();
+    double in_yWidth1N = ywidth1N_h->GetMean();
+    double in_xWidth1N = xwidth1N_h->GetMean();
+    double in_corr1N = rho1N_h->GetMean();
+    double in_yWidth1W = ywidth1W_h->GetMean();
+    double in_xWidth1W = xwidth1W_h->GetMean();
+    double in_corr1W =rho1W_h->GetMean();
+    double in_weight1N =weight1N_h->GetMean();
 
-    in_yWidth2N = ywidth2N_h->GetMean();
-    in_xWidth2N = xwidth2N_h->GetMean();
-    in_corr2N = rho2N_h->GetMean();
-    in_yWidth2W = ywidth2W_h->GetMean();
-    in_xWidth2W = xwidth2W_h->GetMean();
-    in_corr2W =rho2W_h->GetMean();
-    in_weight2N =weight2N_h->GetMean();
+    double in_yWidth2N = ywidth2N_h->GetMean();
+    double in_xWidth2N = xwidth2N_h->GetMean();
+    double in_corr2N = rho2N_h->GetMean();
+    double in_yWidth2W = ywidth2W_h->GetMean();
+    double in_xWidth2W = xwidth2W_h->GetMean();
+    double in_corr2W =rho2W_h->GetMean();
+    double in_weight2N =weight2N_h->GetMean();
 
     double in_yWidth1N_error = ywidth1N_error_h->GetMean();
     double in_xWidth1N_error = xwidth1N_error_h->GetMean();
@@ -210,6 +189,11 @@ void overlapDiff_DG(TString suffix)
     double in_xWidth2W_error = xwidth2W_error_h->GetMean();
     double in_corr2W_error =rho2W_error_h->GetMean();
     double in_weight2N_error =weight2N_error_h->GetMean();
+
+    TFile *fAna = new TFile("overlapDiff_TOYS_2016_"+suffix+".root","recreate");
+
+    TH1F *overDiff = new TH1F("overDiff","VdM Scan Measured vs True Overlap",200,-0.1,0.1);
+    TH1F *capSigAeffDiff = new TH1F("capSigAeffDiff","VdM Scan Measured vs True Overlap",360,0.,0.12);
 
     TF2 *multBeam = new TF2("multBeam",beamMultDG,-30,30,-30,30,18);
 
@@ -247,7 +231,7 @@ void overlapDiff_DG(TString suffix)
     outTrainTree->Branch("in_yWidth1W",&in_yWidth1W,"in_yWidth1W/D");
     outTrainTree->Branch("in_xWidth1W",&in_xWidth1W,"in_xWidth1W/D");
     outTrainTree->Branch("in_corr1W",&in_corr1W,"in_corr1W/D");
-    outTrainTree->Branch("in_weight1",&in_weight1,"in_weight1/D");
+    outTrainTree->Branch("in_weight1N",&in_weight1N,"in_weight1N/D");
 
     outTrainTree->Branch("in_yWidth2N",&in_yWidth2N,"in_yWidth2N/D");
     outTrainTree->Branch("in_xWidth2N",&in_xWidth2N,"in_xWidth2N/D");
@@ -255,7 +239,7 @@ void overlapDiff_DG(TString suffix)
     outTrainTree->Branch("in_yWidth2W",&in_yWidth2W,"in_yWidth2W/D");
     outTrainTree->Branch("in_xWidth2W",&in_xWidth2W,"in_xWidth2W/D");
     outTrainTree->Branch("in_corr2W",&in_corr2W,"in_corr2W/D");
-    outTrainTree->Branch("in_weight2",&in_weight2,"in_weight2/D");
+    outTrainTree->Branch("in_weight2N",&in_weight2N,"in_weight2N/D");
 
     double mu1_b2x_fit, sigma1_b2x_fit, mu2_b2x_fit, sigma2_b2x_fit;
     double mu1_b2y_fit, sigma1_b2y_fit, mu2_b2y_fit, sigma2_b2y_fit;
@@ -278,7 +262,7 @@ void overlapDiff_DG(TString suffix)
     outTrainTree->Branch("overlapDiff",&overlapDiff,"overlapDiff/D");
 
 
-    for(int z = 0 ; z < 500 ; z++){
+    for(int z = 0 ; z < 1000 ; z++){
 
         TH1F* hb2x = new TH1F("hb2x","hb2x",scansteps,-0.5,(scansteps-1)+0.5);
         TH1F* hb2y = new TH1F("hb2y","hb2y",scansteps,-0.5,(scansteps-1)+0.5);
