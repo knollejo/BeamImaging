@@ -314,7 +314,7 @@ std::cout<<"Overlap-Integral Fit Regression: "<<overlapReg<<std::endl;
 
 TRandom3 rand;
   rand.SetSeed(0);
- TFile *fAna = new TFile("DataAnalysisBunch"+bunchStr[i]+"DG_new_"+suff+".root","recreate");
+ TFile *fAna = new TFile("DataAnalysisBunch"+bunchStr[i]+"SG_new_"+suff+".root","recreate");
   TH1F *integ = new TH1F("integ","Overlap Distribution",1000,0.,1.);
 
 TH1F *overlapInt_h = new TH1F("overlapInt","overlapInt",200,0.0,1.);

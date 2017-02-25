@@ -209,7 +209,7 @@ void vdmScanTreeAnalyzerDG_onData2_studyUnc_2016()
 
 //TFile *f = TFile::Open("testNEW8_coarse_ext.root");
    //TString bunchStr[5] = {"51","771","1631","2211","2674"};
-TString bunchStr[5] = {"41","281","872","1783","2063"};
+TString bunchStr[5] = {"41"};//,"281","872","1783","2063"};
  gStyle->SetOptStat(0);
 
 
