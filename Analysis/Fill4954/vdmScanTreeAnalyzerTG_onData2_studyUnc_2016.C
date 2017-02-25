@@ -667,7 +667,7 @@ std::cout<<"Overlap-Integral Fit Regression: "<<overlapReg<<std::endl;
 	  statErrX1 = hdataX1->GetBinError(xs,ys);
 	  resX1->SetBinContent(xs,ys,valDiffX1/statErrX1);
 	  dofX1 +=1.;
-	  chi2X1 +=(TMath::Power(valDiffX1,2.)/statErrX1);///hmodelX1->GetBinContent(xs,ys);
+	  chi2X1 +=(TMath::Power(valDiffX1/statErrX1,2.));///hmodelX1->GetBinContent(xs,ys);
 
 	  }
 	  //else{resX1->SetBinContent(xs,ys,0.);}
@@ -679,7 +679,7 @@ std::cout<<"Overlap-Integral Fit Regression: "<<overlapReg<<std::endl;
 	  valDiffY1 = hdataY1->GetBinContent(xs,ys) - hmodelY1->GetBinContent(xs,ys);
 	  statErrY1 = hdataY1->GetBinError(xs,ys);
 	  resY1->SetBinContent(xs,ys,valDiffY1/statErrY1);
-	  chi2Y1+=(TMath::Power(valDiffY1,2.)/statErrY1);
+	  chi2Y1+=(TMath::Power(valDiffY1/statErrY1,2.));
 	  dofY1 +=1.;
 	  }
 	  //else{resY1->SetBinContent(xs,ys,0.);}
@@ -691,7 +691,7 @@ std::cout<<"Overlap-Integral Fit Regression: "<<overlapReg<<std::endl;
 	  valDiffX2 = hdataX2->GetBinContent(xs,ys) - hmodelX2->GetBinContent(xs,ys);
 	  statErrX2 = hdataX2->GetBinError(xs,ys);
 	  resX2->SetBinContent(xs,ys,valDiffX2/statErrX2);
-	  chi2X2+=(TMath::Power(valDiffX2,2.)/statErrX2);
+	  chi2X2+=(TMath::Power(valDiffX2/statErrX2,2.));
 	  dofX2 +=1.;
 	  }
 	  else{resX2->SetBinContent(xs,ys,0.);}
@@ -703,7 +703,7 @@ std::cout<<"Overlap-Integral Fit Regression: "<<overlapReg<<std::endl;
 	  valDiffY2 = hdataY2->GetBinContent(xs,ys) - hmodelY2->GetBinContent(xs,ys);
 	  statErrY2 = hdataY2->GetBinError(xs,ys);
 	  resY2->SetBinContent(xs,ys,valDiffY2/statErrY2);
-	  chi2Y2+=(TMath::Power(valDiffY2,2.)/statErrY2);
+	  chi2Y2+=(TMath::Power(valDiffY2/statErrY2,2.));
 	  dofY2 +=1.;
 	  }
 	  else{resY2->SetBinContent(xs,ys,0.);}
