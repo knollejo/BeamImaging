@@ -1,15 +1,10 @@
 from ROOT import TFile
 
-files = {0: ('1783_DG', 'DataAnalysisBunch1783DG_with_StronRescale.root'), \
-         1: ('1783_TG', 'DataAnalysisBunch1783TG_with_StronRescale.root'), \
-         2: ('2063_DG', 'DataAnalysisBunch2063DG_with_StronRescale.root'), \
-         3: ('2063_TG', 'DataAnalysisBunch2063TG_with_StronRescale.root'), \
-         4: ('281_DG', 'DataAnalysisBunch281DG_with_StronRescale.root'), \
-         5: ('281_TG', 'DataAnalysisBunch281TG_with_StronRescale.root'), \
-         6: ('41_DG', 'DataAnalysisBunch41DG_with_StronRescale.root'), \
-         7: ('41_TG', 'DataAnalysisBunch41TG_with_StronRescale.root'), \
-         8: ('872_DG', 'DataAnalysisBunch872DG_with_StronRescale.root'), \
-         9: ('872_TG', 'DataAnalysisBunch872TG_with_StronRescale.root')}
+bunchcrossings = ('41', '281', '872', '1783', '2063')
+beamshapes = ('SG', 'DG', 'SupG', 'TG')
+files = dict(zip([i for i in range(len(bunchcrossings)*len(beamshapes))], \
+        [(a+'_'+b, 'DataAnalysisBunch'+a+b+'_new_StronRescale.root') for a in \
+        bunchcrossings for b in beamshapes]))
 def scale(x, y):
     return 0.00458 * 1e4 * x, 0.00458 * 1e4 * y
 parameters = {0: {'key': 'weight1N', 'name': 'w1N'}, \
