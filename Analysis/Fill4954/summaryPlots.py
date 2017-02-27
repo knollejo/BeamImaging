@@ -75,6 +75,42 @@ def residualPlots(crossings, shapes, chiSq, dof):
                 canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.pdf')
                 canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.C')
 
+def exampleDataPlot(bx, shape, comp):
+    kBird()
+    f = TFile.Open('DataAnalysisBunch'+bx+shape+'_new_StronRescale.root')
+    if f:
+        hist = f.Get('hdata'+comp+'__xVar_yVar')
+        hist.SetTitle('')
+        hist.SetName(bx+shape+'_dataHist'+comp)
+        canvas = TCanvas('c_'+hist.GetName(), '', 600, 600)
+        canvas.SetFrameFillColor(0)
+        hist.Draw("COLZ")
+        canvas.Update()
+        hist.GetXaxis().SetTitle('x [cm]')
+        hist.GetXaxis().SetLabelSize(0.025)
+        hist.GetYaxis().SetTitle('y [cm]')
+        hist.GetYaxis().SetLabelSize(0.025)
+        hist.GetYaxis().SetTitleOffset(1.3)
+        hist.GetZaxis().SetTitle('Number of Vertices')
+        hist.GetZaxis().SetLabelSize(0.025)
+        hist.GetZaxis().SetTitleOffset(0.9)
+        hist.GetZaxis().SetRangeUser(0.0,240.0)
+        hist.GetZaxis().CenterTitle()
+        hist.GetZaxis().SetNdivisions(1, False)
+        palette = hist.GetListOfFunctions().FindObject('palette')
+        palette.SetX2NDC(0.929)
+        pave = TPaveText(0.65, 0.82, 0.88, 0.88, 'NDC')
+        pave.SetTextFont(42)
+        pave.SetTextSize(0.025)
+        pave.AddText('Scan '+comp+', BX '+bx)
+        pave.AddText('Measured data')
+        pave.Draw('same')
+        drawCMS(wip=True)
+        canvas.Modified()
+        canvas.Update()
+        canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.pdf')
+        canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.C')
+
 def makeShapesCrossingsHist(crossings, shapes, name):
     kBird()
     gStyle.SetOptStat(0)
@@ -145,11 +181,12 @@ def correctionPlot(crossings, shapes, overDiff):
     canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.C')
 
 def summaryPlots(crossings, shapes):
-    chiSq, dof = computeChiSquares(crossings, shapes)
+    #chiSq, dof = computeChiSquares(crossings, shapes)
     #overDiff = gatherFromToys(crossings, shapes)
     #residualPlots(crossings, shapes, chiSq, dof)
-    chiSqPlot(crossings, shapes, chiSq, dof)
+    #chiSqPlot(crossings, shapes, chiSq, dof)
     #correctionPlot(crossings, shapes, overDiff)
+    exampleDataPlot('41', 'DG', 'X1')
 
 if __name__ == '__main__':
     summaryPlots(bunchcrossings, beamshapes)
