@@ -101,10 +101,10 @@ def chiSqPlot(crossings, shapes, chiSq, dof):
     canvas.Update()
     hist.GetXaxis().SetNdivisions(len(crossings), False)
     hist.GetYaxis().SetNdivisions(nShapes, False)
-    hist.GetZaxis().SetTitle('#chi^{2}')
+    hist.GetZaxis().SetTitle('#chi^{2} / d.o.f.')
     hist.GetZaxis().SetLabelSize(0.025)
     hist.GetZaxis().SetTitleOffset(0.5)
-    hist.GetZaxis().SetRangeUser(0.95,1.2)
+    hist.GetZaxis().SetRangeUser(1.05,1.12)
     hist.GetZaxis().CenterTitle()
     hist.GetZaxis().SetNdivisions(1, False)
     palette = hist.GetListOfFunctions().FindObject('palette')
@@ -146,10 +146,10 @@ def correctionPlot(crossings, shapes, overDiff):
 
 def summaryPlots(crossings, shapes):
     chiSq, dof = computeChiSquares(crossings, shapes)
-    overDiff = gatherFromToys(crossings, shapes)
-    residualPlots(crossings, shapes, chiSq, dof)
+    #overDiff = gatherFromToys(crossings, shapes)
+    #residualPlots(crossings, shapes, chiSq, dof)
     chiSqPlot(crossings, shapes, chiSq, dof)
-    correctionPlot(crossings, shapes, overDiff)
+    #correctionPlot(crossings, shapes, overDiff)
 
 if __name__ == '__main__':
     summaryPlots(bunchcrossings, beamshapes)
