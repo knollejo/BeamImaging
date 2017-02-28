@@ -423,17 +423,17 @@ std::cout<<"Overlap-Integral Fit Regression: "<<overlapReg<<std::endl;
     TH1F *ywidth2W_h = new TH1F("ywidth2W_h","ywidth2W_h",200,0.5,6.);
     ywidth2W_h->Fill(yWidthW2.getValV());
 
-    TH1F *weight1N_h = new TH1F("weight1N_h","weight1N_h",200,0.0,1.);
+    TH1F *weight1N_h = new TH1F("weight1N_h","weight1N_h",200,-1.0,0.0);
     weight1N_h->Fill(w1N.getValV());
-    TH1F *weight2N_h = new TH1F("weight2N_h","weight2N_h",200,0.0,1.);
+    TH1F *weight2N_h = new TH1F("weight2N_h","weight2N_h",200,-1.0,0.0);
     weight2N_h->Fill(w2N.getValV());
-    TH1F *weight1M_h = new TH1F("weight1M_h","weight1M_h",200,0.0,1.);
+    TH1F *weight1M_h = new TH1F("weight1M_h","weight1M_h",200,0.0,2.0);
     weight1M_h->Fill(w1M.getValV());
-    TH1F *weight2M_h = new TH1F("weight2M_h","weight2M_h",200,0.0,1.);
+    TH1F *weight2M_h = new TH1F("weight2M_h","weight2M_h",200,0.0,2.0);
     weight2M_h->Fill(w2M.getValV());
-    TH1F *weight1W_h = new TH1F("weight1W_h","weight1W_h",200,0.0,1.);
+    TH1F *weight1W_h = new TH1F("weight1W_h","weight1W_h",200,0.0,2.0);
     weight1W_h->Fill(w1W.getValV());
-    TH1F *weight2W_h = new TH1F("weight2W_h","weight2W_h",200,0.0,1.);
+    TH1F *weight2W_h = new TH1F("weight2W_h","weight2W_h",200,0.0,2.0);
     weight2W_h->Fill(w2W.getValV());
 
     TH1F *rho1N_h = new TH1F("rho1N_h","rho1N_h",200,-0.5,0.5);
