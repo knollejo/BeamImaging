@@ -168,7 +168,7 @@ def correctionPlot(crossings, shapes, overDiff):
     canvas.Update()
     hist.GetXaxis().SetNdivisions(len(crossings), False)
     hist.GetYaxis().SetNdivisions(nShapes, False)
-    hist.GetZaxis().SetTitle('correction for XY correlations [%]')
+    hist.GetZaxis().SetTitle('correction on overlap integral [%]')
     hist.GetZaxis().SetLabelSize(0.025)
     hist.GetZaxis().SetTitleOffset(0.5)
     hist.GetZaxis().SetRangeUser(-1.2,0.0)
@@ -238,9 +238,9 @@ def summaryPlots(crossings, shapes):
     overDiff = gatherFromToys(crossings, shapes)
     #residualPlots(crossings, shapes, chiSq, dof)
     #chiSqPlot(crossings, shapes, chiSq, dof)
-    #correctionPlot(crossings, shapes, overDiff)
+    correctionPlot(crossings, shapes, overDiff)
     #exampleDataPlot('41', 'DG', 'X1')
-    correctedCrossSectionsPlot(crossings, ('DG','TG','SupG'), overDiff)
+    #correctedCrossSectionsPlot(crossings, ('DG','TG','SupG'), overDiff)
 
 if __name__ == '__main__':
     summaryPlots(bunchcrossings, beamshapes)
