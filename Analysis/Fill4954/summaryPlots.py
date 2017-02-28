@@ -4,11 +4,13 @@ __ARGV__.append('-b')
 from computeChiSquares import computeChiSquares
 from gatherFromToys import gatherFromToys
 from array import array
-from ROOT import TFile, TColor, TCanvas, TLatex, TPaveText, TH2D, gStyle
+from ROOT import TFile, TColor, TCanvas, TLatex, TPaveText, TH2D, gStyle, \
+                 TMultiGraph, TGraphErrors, TLegend, TH2F
 
 bunchcrossings = ('41', '281', '872', '1783', '2063')
 beamshapes = ('SG', 'DG', 'SupG', 'TG')
-shapeNames = {'SG': 'Single Gaussian', \
+shapeNames = {'': 'uncorrected', \
+              'SG': 'Single Gaussian', \
               'DG': 'Double Gaussian', \
               'SupG': 'Super Gaussian', \
               'TG': 'Triple Gaussian'}
@@ -180,13 +182,65 @@ def correctionPlot(crossings, shapes, overDiff):
     canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.pdf')
     canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.C')
 
+def correctedCrossSectionsPlot(crossings, shapes, overDiff):
+    uncorrected = {41: (3.2575816286, 0.00514858611944), \
+                   281: (3.26316215713, 0.00468789412223), \
+                   872: (3.27340775031, 0.00484925398906), \
+                   1783: (3.24986926821, 0.00460908436455), \
+                   2063: (3.26363843728, 0.0044071069983)}
+    multi = TMultiGraph('sigmavis', '')
+    graphs = []
+    n = len(shapes) + 1
+    for i, shape in enumerate([''] + list(shapes)):
+        xval = array('d', [a+0.08*(i-0.5*n) for a in range(len(crossings))])
+        xerr = array('d', len(crossings)*[0])
+        yval = array('d', [uncorrected[int(bx)][0] for bx in crossings])
+        yerr = array('d', [uncorrected[int(bx)][1] for bx in crossings])
+        if shape:
+            for j, bx in enumerate(crossings):
+                yval[j] *= 1 + overDiff[shape][bx]
+                yerr[j] *= 1 + overDiff[shape][bx]
+        graph = TGraphErrors(len(crossings), xval, yval, xerr, yerr)
+        graph.SetName('ge'+shape)
+        graph.SetMarkerStyle(20)
+        graph.SetMarkerColor(1+i)
+        multi.Add(graph)
+        graphs.append(graph)
+    gStyle.SetOptStat(0)
+    hist = TH2F('hist', '', len(crossings), -0.5, len(crossings)-0.5, 100, 3.23, 3.33)
+    for i, bx in enumerate(crossings):
+        hist.GetXaxis().SetBinLabel(i+1, bx)
+    canvas = TCanvas('c_'+multi.GetName(), '', 600, 600)
+    hist.Draw('AXIS')
+    multi.Draw('P')
+    canvas.Update()
+    hist.GetXaxis().SetLabelSize(0.035)
+    hist.GetXaxis().SetNdivisions(len(crossings), False)
+    hist.GetYaxis().SetTitle('#sigma_{vis} [b]')
+    hist.GetYaxis().SetLabelSize(0.025)
+    hist.GetYaxis().SetTitleOffset(1.3)
+    leg = TLegend(0.15, 0.82, 0.85, 0.85)
+    leg.SetNColumns(len(shapes)+1)
+    leg.SetBorderSize(0)
+    for i, shape in enumerate([''] + list(shapes)):
+        entry = leg.AddEntry('ge'+shape, shapeNames[shape], 'P')
+        entry.SetMarkerStyle(20)
+        entry.SetMarkerColor(1+i)
+    leg.Draw()
+    drawCMS(wip=True)
+    canvas.Modified()
+    canvas.Update()
+    canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.pdf')
+    canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.C')
+
 def summaryPlots(crossings, shapes):
     #chiSq, dof = computeChiSquares(crossings, shapes)
-    #overDiff = gatherFromToys(crossings, shapes)
+    overDiff = gatherFromToys(crossings, shapes)
     #residualPlots(crossings, shapes, chiSq, dof)
     #chiSqPlot(crossings, shapes, chiSq, dof)
     #correctionPlot(crossings, shapes, overDiff)
-    exampleDataPlot('41', 'DG', 'X1')
+    #exampleDataPlot('41', 'DG', 'X1')
+    correctedCrossSectionsPlot(crossings, ('DG','TG','SupG'), overDiff)
 
 if __name__ == '__main__':
     summaryPlots(bunchcrossings, beamshapes)
