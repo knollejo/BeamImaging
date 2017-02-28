@@ -261,6 +261,9 @@ int i = 0;
   RooRealVar rho_W1("rho_W1","rho_W1",-0.48,0.48) ;
   RooRealVar theta1("theta1","theta1",0.0,0.5*pi) ;
   RooRealVar phi1("phi1","phi1",0.0,0.5*pi) ;
+  RooFormulaVar w1N("w1N","sin(theta1)**2*cos(phi1)**2", RooArgSet(theta1,phi1)) ;
+  RooFormulaVar w1M("w1M","sin(theta1)**2*sin(phi1)**2", RooArgSet(theta1,phi1)) ;
+  RooFormulaVar w1W("w1W","cos(theta1)**2", RooArgSet(theta1)) ;
 
   RooRealVar yWidthN2("yWidthN2","yWidthN2",1.3,3.0) ;
   RooRealVar xWidthN2("xWidthN2","xWidthN2",1.3,3.0) ;
@@ -281,6 +284,9 @@ int i = 0;
   RooRealVar rho_W2("rho_W2","rho_W2",-0.48,0.48) ;
   RooRealVar theta2("theta2","theta2",0.0,0.5*pi) ;
   RooRealVar phi2("phi2","phi2",0.0,0.5*pi) ;
+  RooFormulaVar w1N("w1N","sin(theta2)**2*cos(phi2)**2", RooArgSet(theta2,phi2)) ;
+  RooFormulaVar w1M("w1M","sin(theta2)**2*sin(phi2)**2", RooArgSet(theta2,phi2)) ;
+  RooFormulaVar w1W("w1W","cos(theta2)**2", RooArgSet(theta2)) ;
 
   RooRealVar vtxRes("vtxRes","vtxRes",0.00356/scaling) ;
   vtxRes.setConstant();
@@ -295,10 +301,10 @@ int i = 0;
   RooGaussian resY("resY","resY",yVar,meanRes,yWidthRes);
 
 
-  TripleGauss_V1  beam1RestVerticesUnfold_XScan("beam1RestVerticesUnfold_Xscan","beam1RestVerticesUnfold_Xscan",xVar,yVar,x0_1,y0_1,theta1,phi1,rho_N1,xWidthN1,yWidthN1,rho_M1,xWidthM1,yWidthM1,rho_W1,xWidthW1,yWidthW1,theta2,phi2,yWidthN2,xWidthM2,yWidthW2,vtxRes);
-  TripleGauss_V2  beam1RestVerticesUnfold_YScan("beam1RestVerticesUnfold_Yscan","beam1RestVerticesUnfold_Yscan",xVar,yVar,x0_2,y0_2,theta1,phi1,rho_N1,xWidthN1,yWidthN1,rho_M1,xWidthM1,yWidthM1,rho_W1,xWidthW1,yWidthW1,theta2,phi2,xWidthN2,xWidthM2,xWidthW2,vtxRes);
-  TripleGauss_V1  beam2RestVerticesUnfold_XScan("beam2RestVerticesUnfold_Xscan","beam2RestVerticesUnfold_Xscan",xVar,yVar,x0_12,y0_12,theta2,phi2,rho_N2,xWidthN2,yWidthN2,rho_M2,xWidthM2,yWidthM2,rho_W2,xWidthW2,yWidthW2,theta1,phi1,yWidthN1,xWidthM1,yWidthW1,vtxRes);
-  TripleGauss_V2  beam2RestVerticesUnfold_YScan("beam2RestVerticesUnfold_Yscan","beam2RestVerticesUnfold_Yscan",xVar,yVar,x0_22,y0_22,theta2,phi2,rho_N2,xWidthN2,yWidthN2,rho_M2,xWidthM2,yWidthM2,rho_W2,xWidthW2,yWidthW2,theta1,phi1,xWidthN1,xWidthM1,xWidthW1,vtxRes);
+  TripleGauss_V1  beam1RestVerticesUnfold_XScan("beam1RestVerticesUnfold_Xscan","beam1RestVerticesUnfold_Xscan",xVar,yVar,x0_1,y0_1,w1N,w1M,rho_N1,xWidthN1,yWidthN1,rho_M1,xWidthM1,yWidthM1,rho_W1,xWidthW1,yWidthW1,w2N,w2M,yWidthN2,xWidthM2,yWidthW2,vtxRes);
+  TripleGauss_V2  beam1RestVerticesUnfold_YScan("beam1RestVerticesUnfold_Yscan","beam1RestVerticesUnfold_Yscan",xVar,yVar,x0_2,y0_2,w1N,w1M,rho_N1,xWidthN1,yWidthN1,rho_M1,xWidthM1,yWidthM1,rho_W1,xWidthW1,yWidthW1,w2N,w2M,xWidthN2,xWidthM2,xWidthW2,vtxRes);
+  TripleGauss_V1  beam2RestVerticesUnfold_XScan("beam2RestVerticesUnfold_Xscan","beam2RestVerticesUnfold_Xscan",xVar,yVar,x0_12,y0_12,w2N,w2M,rho_N2,xWidthN2,yWidthN2,rho_M2,xWidthM2,yWidthM2,rho_W2,xWidthW2,yWidthW2,w1N,w1M,yWidthN1,xWidthM1,yWidthW1,vtxRes);
+  TripleGauss_V2  beam2RestVerticesUnfold_YScan("beam2RestVerticesUnfold_Yscan","beam2RestVerticesUnfold_Yscan",xVar,yVar,x0_22,y0_22,w2N,w2M,rho_N2,xWidthN2,yWidthN2,rho_M2,xWidthM2,yWidthM2,rho_W2,xWidthW2,yWidthW2,w1N,w1M,xWidthN1,xWidthM1,xWidthW1,vtxRes);
 
 
 
@@ -325,21 +331,6 @@ int i = 0;
 
   RooFitResult* r= simPdf.fitTo(combData,RooFit::PrintLevel(3),RooFit::Verbose(1),RooFit::Save());
 
-    double wN1 = TMath::Power(sin(theta1.getValV()), 2.0) * TMath::Power(cos(phi1.getValV()), 2.0);
-    double wN1_Error = 2.0 * sin(theta1.getValV()) * cos(phi1.getValV()) * TMath::Sqrt(TMath::Power(theta1.getError()*cos(theta1.getValV())*cos(phi1.getValV()), 2.0) + TMath::Power(phi1.getError()*sin(theta1.getValV())*sin(phi1.getValV()), 2.0));
-    double wM1 = TMath::Power(sin(theta1.getValV()), 2.0) * TMath::Power(sin(phi1.getValV()), 2.0);
-    double wM1_Error = 2.0 * sin(theta1.getValV()) * sin(phi1.getValV()) * TMath::Sqrt(TMath::Power(theta1.getError()*cos(theta1.getValV())*sin(phi1.getValV()), 2.0) + TMath::Power(phi1.getError()*sin(theta1.getValV())*cos(phi1.getValV()), 2.0));
-    double wW1 = TMath::Power(cos(theta1.getValV()), 2.0);
-    double wW1_Error = 2.0 * sin(theta1.getValV()) * cos(theta1.getValV()) * theta1.getError();
-
-    double wN2 = TMath::Power(sin(theta2.getValV()), 2.0) * TMath::Power(cos(phi2.getValV()), 2.0);
-    double wN2_Error = 2.0 * sin(theta2.getValV()) * cos(phi2.getValV()) * TMath::Sqrt(TMath::Power(theta2.getError()*cos(theta2.getValV())*cos(phi2.getValV()), 2.0) + TMath::Power(phi2.getError()*sin(theta2.getValV())*sin(phi2.getValV()), 2.0));
-    double wM2 = TMath::Power(sin(theta2.getValV()), 2.0) * TMath::Power(sin(phi2.getValV()), 2.0);
-    double wM2_Error = 2.0 * sin(theta2.getValV()) * sin(phi2.getValV()) * TMath::Sqrt(TMath::Power(theta2.getError()*cos(theta2.getValV())*sin(phi2.getValV()), 2.0) + TMath::Power(phi2.getError()*sin(theta2.getValV())*cos(phi2.getValV()), 2.0));
-    double wW2 = TMath::Power(cos(theta2.getValV()), 2.0);
-    double wW2_Error = 2.0 * sin(theta2.getValV()) * cos(theta2.getValV()) * theta2.getError();
-
-
   TF2 *multBeam = new TF2("multBeam",beamMultTG,-30,30,-30,30,26);
   multBeam->SetParameter(0, 0.0);
   multBeam->SetParameter(1, 0.0);
@@ -352,8 +343,8 @@ int i = 0;
   multBeam->SetParameter(8,xWidthW1.getValV());
   multBeam->SetParameter(9,yWidthW1.getValV());
   multBeam->SetParameter(10,rho_W1.getValV());
-  multBeam->SetParameter(11,wN1);
-  multBeam->SetParameter(12,wM1);
+  multBeam->SetParameter(11,w1N.getValV());
+  multBeam->SetParameter(12,w1M.getValV());
   multBeam->SetParameter(13, 0.0);
   multBeam->SetParameter(14, 0.0);
   multBeam->SetParameter(15,xWidthN2.getValV());
@@ -365,8 +356,8 @@ int i = 0;
   multBeam->SetParameter(21,xWidthW2.getValV());
   multBeam->SetParameter(22,yWidthW2.getValV());
   multBeam->SetParameter(23,rho_W2.getValV());
-  multBeam->SetParameter(24,wN2);
-  multBeam->SetParameter(25,wM2);
+  multBeam->SetParameter(24,w2N.getValV());
+  multBeam->SetParameter(25,w2M.getValV());
 
   std::cout<<"Overlap-Integral Fit: "<<multBeam->Integral(-30,30,-30,30)<<std::endl;
 
@@ -435,17 +426,17 @@ std::cout<<"Overlap-Integral Fit Regression: "<<overlapReg<<std::endl;
     ywidth2W_h->Fill(yWidthW2.getValV());
 
     TH1F *weight1N_h = new TH1F("weight1N_h","weight1N_h",200,0.0,1.);
-    weight1N_h->Fill(wN1);
+    weight1N_h->Fill(w1N.getValV());
     TH1F *weight2N_h = new TH1F("weight2N_h","weight2N_h",200,0.0,1.);
-    weight2N_h->Fill(wN2);
+    weight2N_h->Fill(w2N.getValV());
     TH1F *weight1M_h = new TH1F("weight1M_h","weight1M_h",200,0.0,1.);
-    weight1M_h->Fill(wM1);
+    weight1M_h->Fill(w1M.getValV());
     TH1F *weight2M_h = new TH1F("weight2M_h","weight2M_h",200,0.0,1.);
-    weight2M_h->Fill(wM2);
+    weight2M_h->Fill(w2M.getValV());
     TH1F *weight1W_h = new TH1F("weight1W_h","weight1W_h",200,0.0,1.);
-    weight1W_h->Fill(wW1);
+    weight1W_h->Fill(w1W.getValV());
     TH1F *weight2W_h = new TH1F("weight2W_h","weight2W_h",200,0.0,1.);
-    weight2W_h->Fill(wW2);
+    weight2W_h->Fill(w2W.getValV());
 
     TH1F *rho1N_h = new TH1F("rho1N_h","rho1N_h",200,-0.5,0.5);
     rho1N_h->Fill(rho_N1.getValV());
@@ -527,16 +518,22 @@ std::cout<<"Overlap-Integral Fit Regression: "<<overlapReg<<std::endl;
     ywidth2W_error_h->Fill(ywidth2W_error);
 
     TH1F *weight1N_error_h = new TH1F("weight1N_error_h","weight1N_error_h",200,0.0,1.);
+    double wN1_Error = 2.0 * sin(theta1.getValV()) * cos(phi1.getValV()) * TMath::Sqrt(TMath::Power(theta1.getError()*cos(theta1.getValV())*cos(phi1.getValV()), 2.0) + TMath::Power(phi1.getError()*sin(theta1.getValV())*sin(phi1.getValV()), 2.0));
     weight1N_error_h->Fill(wN1_Error);
     TH1F *weight1M_error_h = new TH1F("weight1M_error_h","weight1M_error_h",200,0.0,1.);
+    double wM1_Error = 2.0 * sin(theta1.getValV()) * sin(phi1.getValV()) * TMath::Sqrt(TMath::Power(theta1.getError()*cos(theta1.getValV())*sin(phi1.getValV()), 2.0) + TMath::Power(phi1.getError()*sin(theta1.getValV())*cos(phi1.getValV()), 2.0));
     weight1M_error_h->Fill(wM1_Error);
     TH1F *weight1W_error_h = new TH1F("weight1W_error_h","weight1W_error_h",200,0.0,1.);
+    double wW1_Error = 2.0 * sin(theta1.getValV()) * cos(theta1.getValV()) * theta1.getError();
     weight1W_error_h->Fill(wW1_Error);
     TH1F *weight2N_error_h = new TH1F("weight2N_error_h","weight2N_error_h",200,0.0,1.);
+    double wN2_Error = 2.0 * sin(theta2.getValV()) * cos(phi2.getValV()) * TMath::Sqrt(TMath::Power(theta2.getError()*cos(theta2.getValV())*cos(phi2.getValV()), 2.0) + TMath::Power(phi2.getError()*sin(theta2.getValV())*sin(phi2.getValV()), 2.0));
     weight2N_error_h->Fill(wN2_Error);
     TH1F *weight2M_error_h = new TH1F("weight2M_error_h","weight2M_error_h",200,0.0,1.);
+    double wM2_Error = 2.0 * sin(theta2.getValV()) * sin(phi2.getValV()) * TMath::Sqrt(TMath::Power(theta2.getError()*cos(theta2.getValV())*sin(phi2.getValV()), 2.0) + TMath::Power(phi2.getError()*sin(theta2.getValV())*cos(phi2.getValV()), 2.0));
     weight2M_error_h->Fill(wM2_Error);
     TH1F *weight2W_error_h = new TH1F("weight2W_error_h","weight2W_error_h",200,0.0,1.);
+    double wW2_Error = 2.0 * sin(theta2.getValV()) * cos(theta2.getValV()) * theta2.getError();
     weight2W_error_h->Fill(wW2_Error);
 
     TH1F *rho1N_error_h = new TH1F("rho1N_error_h","rho1N_error_h",200,-0.5,0.5);

@@ -22,8 +22,8 @@ public:
 	      RooAbsReal& _yVar,
 	      RooAbsReal& _x0,
 	      RooAbsReal& _y0,
-	      RooAbsReal& _theta1,
-          RooAbsReal& _phi1,
+	      RooAbsReal& _w1N,
+              RooAbsReal& _w1M,
 	      RooAbsReal& _rho_N1,
 	      RooAbsReal& _xWidthN1,
 	      RooAbsReal& _yWidthN1,
@@ -33,8 +33,8 @@ public:
 	      RooAbsReal& _rho_W1,
 	      RooAbsReal& _xWidthW1,
 	      RooAbsReal& _yWidthW1,
-	      RooAbsReal& _theta2,
-	      RooAbsReal& _phi2,
+	      RooAbsReal& _w2N,
+	      RooAbsReal& _w2M,
 	      RooAbsReal& _yWidthN2,
 	      RooAbsReal& _yWidthM2,
 	      RooAbsReal& _yWidthW2,
@@ -49,8 +49,8 @@ protected:
   RooRealProxy  yVar;
   RooRealProxy  x0;
   RooRealProxy  y0;
-  RooRealProxy  theta1;
-  RooRealProxy  phi1;
+  RooRealProxy  w1N;
+  RooRealProxy  w1M;
   RooRealProxy  rho_N1;
   RooRealProxy  xWidthN1;
   RooRealProxy  yWidthN1;
@@ -60,8 +60,8 @@ protected:
   RooRealProxy  rho_W1;
   RooRealProxy  xWidthW1;
   RooRealProxy  yWidthW1;
-  RooRealProxy  theta2;
-  RooRealProxy  phi2;
+  RooRealProxy  w2N;
+  RooRealProxy  w2M;
   RooRealProxy  yWidthN2;
   RooRealProxy  yWidthM2;
   RooRealProxy  yWidthW2;
