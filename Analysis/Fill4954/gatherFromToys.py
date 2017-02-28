@@ -1,7 +1,7 @@
 from ROOT import TFile
 
 bunchcrossings = ('41', '281', '872', '1783', '2063')
-beamshapes = ('SG', 'DG', 'SupG', 'TG')
+beamshapes = ('SG', 'DG', 'SupG', 'TG', 'SupDG')
 
 def gatherFromToys(crossings, shapes):
     overDiff = {}
@@ -27,7 +27,10 @@ if __name__ == '__main__':
     for shape in beamshapes:
         print shape,
         for bx in bunchcrossings:
-            print ';', overDiff[shape][bx],
+            if overDiff[shape][bx]:
+                print ';', overDiff[shape][bx],
+            else:
+                print ';', '',
         print
     print
     print

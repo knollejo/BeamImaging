@@ -1,7 +1,7 @@
 from ROOT import TFile
 
 bunchcrossings = ('41', '281', '872', '1783', '2063')
-beamshapes = ('SG', 'DG', 'SupG', 'TG')
+beamshapes = ('SG', 'DG', 'SupG', 'TG', 'SupDG')
 
 def computeChiSquares(crossings, shapes):
     components = ('X1', 'Y1', 'X2', 'Y2')
@@ -40,7 +40,10 @@ if __name__ == '__main__':
     for shape in beamshapes:
         print shape,
         for bx in bunchcrossings:
-            print ';', chiSq[shape][bx]/dof[shape][bx],
+            if chiSq[shape][bx] and dof[shape][bx]:
+                print ';', chiSq[shape][bx]/dof[shape][bx],
+            else:
+                print ';', '',
         print
     print
     print
