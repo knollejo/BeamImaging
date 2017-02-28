@@ -258,6 +258,7 @@ int i = 0;
   RooRealVar xWidthW1Diff("xWidthW1Diff","xWidthW1Diff",0.01,1.2);
   RooFormulaVar yWidthW1("yWidthW1","yWidthN1+yWidthM1Diff+yWidthW1Diff",RooArgSet(yWidthN1,yWidthM1Diff,yWidthW1Diff));
   RooFormulaVar xWidthW1("xWidthW1","xWidthN1+xWidthM1Diff+xWidthW1Diff",RooArgSet(xWidthN1,xWidthM1Diff,xWidthW1Diff));
+  RooRealVar rho_W1("rho_W1","rho_W1",-0.48,0.48) ;
   RooRealVar w1N("w1N","w1N",-1.0,0.0) ;
   RooRealVar w1MFraction("w1MFraction","w1MFraction",0.0,1.0) ;
   RooFormulaVar w1M("w1M","w1MFraction*(1.0-w1N)", RooArgSet(w1MFraction,w1N)) ;
@@ -282,8 +283,8 @@ int i = 0;
   RooRealVar rho_W2("rho_W2","rho_W2",-0.48,0.48) ;
   RooRealVar w2N("w2N","w2N",-1.0,0.0) ;
   RooRealVar w2MFraction("w2MFraction","w2MFraction",0.0,1.0) ;
-  RooFormulaVar w1M("w2M","w2MFraction*(1.0-w2N)", RooArgSet(w2MFraction,w2N)) ;
-  RooFormulaVar w1W("w2W","(1.0-w2MFraction)*(1.0-w2N)", RooArgSet(w2MFraction,w2N)) ;
+  RooFormulaVar w2M("w2M","w2MFraction*(1.0-w2N)", RooArgSet(w2MFraction,w2N)) ;
+  RooFormulaVar w2W("w2W","(1.0-w2MFraction)*(1.0-w2N)", RooArgSet(w2MFraction,w2N)) ;
 
   RooRealVar vtxRes("vtxRes","vtxRes",0.00356/scaling) ;
   vtxRes.setConstant();

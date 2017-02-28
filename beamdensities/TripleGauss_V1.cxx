@@ -199,13 +199,13 @@ ClassImp(TripleGauss_V1)
    fitFuncW1M2->SetParameter(1,sigmaW1M2FinalInv(1,1));
    fitFuncW1M2->SetParameter(2,sigmaW1M2FinalInv(1,0));
    fitFuncW1M2->SetParameter(3,(sigmaW1M2FinalInv.Invert()).Determinant());
-   fitFuncW1M2->SetParameter(4,(1.0-w1N-w1M)wW1*w2M);
+   fitFuncW1M2->SetParameter(4,(1.0-w1N-w1M)*w2M);
 
    fitFuncW1W2->SetParameter(0,sigmaW1W2FinalInv(0,0));
    fitFuncW1W2->SetParameter(1,sigmaW1W2FinalInv(1,1));
    fitFuncW1W2->SetParameter(2,sigmaW1W2FinalInv(1,0));
    fitFuncW1W2->SetParameter(3,(sigmaW1W2FinalInv.Invert()).Determinant());
-   fitFuncW1W2->SetParameter(4,(1.0-w1N-w1M)wW1*(1.0-w2N-w2M));
+   fitFuncW1W2->SetParameter(4,(1.0-w1N-w1M)*(1.0-w2N-w2M));
 
    double combVal = fitFuncN1N2->Eval(xVar-x0,yVar-y0)
                   + fitFuncN1M2->Eval(xVar-x0,yVar-y0)

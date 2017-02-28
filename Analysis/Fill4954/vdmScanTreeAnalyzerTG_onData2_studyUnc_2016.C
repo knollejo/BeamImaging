@@ -284,9 +284,9 @@ int i = 0;
   RooRealVar rho_W2("rho_W2","rho_W2",-0.48,0.48) ;
   RooRealVar theta2("theta2","theta2",0.0,0.5*pi) ;
   RooRealVar phi2("phi2","phi2",0.0,0.5*pi) ;
-  RooFormulaVar w1N("w1N","sin(theta2)**2*cos(phi2)**2", RooArgSet(theta2,phi2)) ;
-  RooFormulaVar w1M("w1M","sin(theta2)**2*sin(phi2)**2", RooArgSet(theta2,phi2)) ;
-  RooFormulaVar w1W("w1W","cos(theta2)**2", RooArgSet(theta2)) ;
+  RooFormulaVar w2N("w2N","sin(theta2)**2*cos(phi2)**2", RooArgSet(theta2,phi2)) ;
+  RooFormulaVar w2M("w2M","sin(theta2)**2*sin(phi2)**2", RooArgSet(theta2,phi2)) ;
+  RooFormulaVar w2W("w2W","cos(theta2)**2", RooArgSet(theta2)) ;
 
   RooRealVar vtxRes("vtxRes","vtxRes",0.00356/scaling) ;
   vtxRes.setConstant();
