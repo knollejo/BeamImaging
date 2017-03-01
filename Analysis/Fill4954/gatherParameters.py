@@ -1,7 +1,7 @@
 from ROOT import TFile
 
 bunchcrossings = ('41', '281', '872', '1783', '2063')
-beamshapes = ('SG', 'DG', 'SupG', 'TG')
+beamshapes = ('SG', 'DG', 'SupG', 'TG', 'SupDG')
 files = dict(zip([i for i in range(len(bunchcrossings)*len(beamshapes))], \
         [(a+'_'+b, 'DataAnalysisBunch'+a+b+'_new_StronRescale.root') for a in \
         bunchcrossings for b in beamshapes]))
