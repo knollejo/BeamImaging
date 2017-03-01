@@ -5,7 +5,7 @@ from computeChiSquares import computeChiSquares
 from gatherFromToys import gatherFromToys
 from array import array
 from ROOT import TFile, TColor, TCanvas, TLatex, TPaveText, TH2D, gStyle, \
-                 TMultiGraph, TGraphErrors, TLegend, TH2F
+                 TMultiGraph, TGraphErrors, TLegend, TH2F, TH1D
 
 bunchcrossings = ('41', '281', '872', '1783', '2063')
 beamshapes = ('SG', 'DG', 'SupG', 'TG', 'SupDG')
@@ -38,7 +38,6 @@ def drawCMS(wip=False):
 
 def residualPlots(crossings, shapes, chiSq, dof):
     kBird()
-    c = TColor(10000,0.1686,0.1333,0.4314)
     components = ('X1', 'Y1', 'X2', 'Y2')
     for shape in shapes:
         for bx in crossings:
@@ -47,11 +46,16 @@ def residualPlots(crossings, shapes, chiSq, dof):
                 continue
             for comp in components:
                 hist = f.Get('res'+comp)
+                for xbin in range(hist.GetXaxis().GetNbins()+1):
+                    for ybin in range(hist.GetYaxis().GetNbins()+1):
+                        if hist.GetBinContent(xbin, ybin) < -4.99999:
+                            hist.SetBinContent(xbin, ybin, -4.99999)
+                        if hist.GetBinContent(xbin, ybin) == 0.0:
+                            hist.SetBinContent(xbin, ybin, -10.0)
                 hist.SetTitle('')
                 hist.SetName(bx+shape+'_res'+comp)
                 canvas = TCanvas('c_'+hist.GetName(), '', 600, 600)
-                canvas.SetFrameFillColor(10000)
-                hist.Draw("COLZ0")
+                hist.Draw('COLZ')
                 canvas.Update()
                 hist.GetXaxis().SetTitle('x [cm]')
                 hist.GetXaxis().SetLabelSize(0.025)
@@ -78,11 +82,71 @@ def residualPlots(crossings, shapes, chiSq, dof):
                 canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.pdf')
                 canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.C')
 
+def radialResidualPlots(crossings, shapes, chiSq, dof):
+    kBird()
+    gStyle.SetOptStat(0)
+    components = ('X1', 'Y1', 'X2', 'Y2')
+    for shape in shapes:
+        for bx in crossings:
+            f = TFile.Open('DataAnalysisBunch'+bx+shape+'_new_StronRescale.root')
+            if not f:
+                continue
+            for comp in components:
+                dataHist = f.Get('dataHist'+comp)
+                modelHist = f.Get('modelHist'+comp)
+                nbinsx = dataHist.GetXaxis().GetNbins()
+                nbinsy = dataHist.GetYaxis().GetNbins()
+                radialDat = TH1D('radialDat_'+shape+bx+comp, '', nbinsx/2, 0.0, \
+                                 dataHist.GetXaxis().GetXmax())
+                radialMod = TH1D('radialMod_'+shape+bx+comp, '', nbinsx/2, 0.0, \
+                                 dataHist.GetXaxis().GetXmax())
+                hist = TH1D('radialRes_'+shape+bx+comp, '', nbinsx/2, 0.0, \
+                            dataHist.GetXaxis().GetXmax())
+                radialDat.Sumw2()
+                for xbin in range(nbinsx+1):
+                    for ybin in range(nbinsy+1):
+                        r = (dataHist.GetXaxis().GetBinCenter(xbin)**2 + \
+                            dataHist.GetYaxis().GetBinCenter(ybin)**2) ** 0.5
+                        radialDat.Fill(r, dataHist.GetBinContent(xbin, ybin))
+                        radialMod.Fill(r, modelHist.GetBinContent(xbin, ybin))
+                for rbin in range(nbinsx/2+1):
+                    err = radialDat.GetBinError(rbin)
+                    if err > 0.0:
+                        pull = (radialDat.GetBinContent(rbin) - \
+                                radialMod.GetBinContent(rbin)) / err
+                    else:
+                        pull = 0.0
+                    hist.SetBinContent(rbin, pull)
+                canvas = TCanvas('c_'+hist.GetName(), '', 600, 600)
+                hist.Draw('HF')
+                canvas.Update()
+                hist.SetFillColor(4)
+                hist.SetLineColor(1)
+                hist.GetXaxis().SetTitle('r [cm]')
+                hist.GetXaxis().SetLabelSize(0.025)
+                hist.GetYaxis().SetTitle('Pulls')
+                hist.GetYaxis().SetLabelSize(0.025)
+                hist.GetYaxis().SetTitleOffset(1.1)
+                hist.GetYaxis().SetRangeUser(-1.5, 5.0)
+                pave = TPaveText(0.15, 0.79, 0.42, 0.88, 'NDC')
+                pave.SetTextFont(42)
+                pave.SetTextSize(0.025)
+                pave.AddText('Scan '+comp+', BX '+bx)
+                pave.AddText(shapeNames[shape]+' fit')
+                redChiSq = chiSq[shape][bx] / dof[shape][bx]
+                pave.AddText('#chi^{2}/d.o.f. = %6.4f'%(redChiSq))
+                pave.Draw('same')
+                drawCMS(wip=True)
+                canvas.Modified()
+                canvas.Update()
+                canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.pdf')
+                canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.C')
+
 def exampleDataPlot(bx, shape, comp):
     kBird()
     f = TFile.Open('DataAnalysisBunch'+bx+shape+'_new_StronRescale.root')
     if f:
-        hist = f.Get('hdata'+comp+'__xVar_yVar')
+        hist = f.Get('dataHist'+comp)
         hist.SetTitle('')
         hist.SetName(bx+shape+'_dataHist'+comp)
         canvas = TCanvas('c_'+hist.GetName(), '', 600, 600)
@@ -96,7 +160,7 @@ def exampleDataPlot(bx, shape, comp):
         hist.GetYaxis().SetTitleOffset(1.3)
         hist.GetZaxis().SetTitle('Number of Vertices')
         hist.GetZaxis().SetLabelSize(0.025)
-        hist.GetZaxis().SetTitleOffset(0.9)
+        hist.GetZaxis().SetTitleOffset(0.7)
         hist.GetZaxis().SetRangeUser(0.0,240.0)
         hist.GetZaxis().CenterTitle()
         hist.GetZaxis().SetNdivisions(1, False)
@@ -237,10 +301,11 @@ def correctedCrossSectionsPlot(crossings, shapes, overDiff):
 def summaryPlots(crossings, shapes):
     chiSq, dof = computeChiSquares(crossings, shapes)
     #overDiff = gatherFromToys(crossings, shapes)
-    residualPlots(crossings, shapes, chiSq, dof)
+    #residualPlots(crossings, shapes, chiSq, dof)
+    radialResidualPlots(crossings, shapes, chiSq, dof)
     #chiSqPlot(crossings, shapes, chiSq, dof)
     #correctionPlot(crossings, shapes, overDiff)
-    #exampleDataPlot('41', 'DG', 'X1')
+    exampleDataPlot('41', 'DG', 'X1')
     #correctedCrossSectionsPlot(crossings, ('DG','TG','SupG','SupDG'), overDiff)
 
 if __name__ == '__main__':
