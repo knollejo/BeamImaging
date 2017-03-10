@@ -14,7 +14,8 @@ shapeNames = {'': 'uncorrected', \
               'DG': 'Double Gaussian', \
               'SupG': 'Super Gaussian', \
               'TG': 'Triple Gaussian', \
-              'SupDG': 'Super Double Gaussian'}
+              'SupDG': 'Super Double Gaussian', \
+              'noCorr': 'Gaussian w/o corelations'}
 
 def kBird():
     red = array('d', [0.2082, 0.0592, 0.0780, 0.0232, 0.1802, 0.5301, 0.8186, 0.9956, 0.9764])
@@ -72,7 +73,10 @@ def residualPlots(crossings, shapes, chiSq, dof):
                 pave.SetTextFont(42)
                 pave.SetTextSize(0.025)
                 pave.AddText('Scan '+comp+', BX '+bx)
-                pave.AddText(shapeNames[shape]+' fit')
+                if shape[0].islower():
+                    pave.AddText(shapeNames[shape])
+                else:
+                    pave.AddText(shapeNames[shape]+' fit')
                 redChiSq = chiSq[shape][bx] / dof[shape][bx]
                 pave.AddText('#chi^{2}/d.o.f. = %6.4f'%(redChiSq))
                 pave.Draw('same')
@@ -301,14 +305,14 @@ def correctedCrossSectionsPlot(crossings, shapes, overDiff):
     canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.C')
 
 def summaryPlots(crossings, shapes):
-    #chiSq, dof = computeChiSquares(crossings, shapes)
-    overDiff = gatherFromToys(crossings, shapes)
-    #residualPlots(crossings, shapes, chiSq, dof)
+    chiSq, dof = computeChiSquares(crossings, ['noCorr'])
+    #overDiff = gatherFromToys(crossings, shapes)
+    residualPlots(crossings, ['noCorr'], chiSq, dof)
     #radialResidualPlots(crossings, shapes, chiSq, dof)
     #chiSqPlot(crossings, shapes, chiSq, dof)
     #correctionPlot(crossings, shapes, overDiff)
     #exampleDataPlot('41', 'DG', 'X1')
-    correctedCrossSectionsPlot(crossings, ('DG','TG','SupG','SupDG'), overDiff)
+    #correctedCrossSectionsPlot(crossings, ('DG','TG','SupG','SupDG'), overDiff)
 
 if __name__ == '__main__':
     summaryPlots(bunchcrossings, beamshapes)
