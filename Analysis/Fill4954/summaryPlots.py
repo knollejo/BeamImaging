@@ -258,7 +258,7 @@ def correctedCrossSectionsPlot(crossings, shapes, overDiff):
     graphs = []
     n = len(shapes) + 1
     for i, shape in enumerate([''] + list(shapes)):
-        xval = array('d', [a+0.08*(i-0.5*n) for a in range(len(crossings))])
+        xval = array('d', [a+0.09*(i-0.5*n) for a in range(len(crossings))])
         xerr = array('d', len(crossings)*[0])
         yval = array('d', [uncorrected[int(bx)][0] for bx in crossings])
         yerr = array('d', [uncorrected[int(bx)][1] for bx in crossings])
@@ -273,20 +273,21 @@ def correctedCrossSectionsPlot(crossings, shapes, overDiff):
         multi.Add(graph)
         graphs.append(graph)
     gStyle.SetOptStat(0)
-    hist = TH2F('hist', '', len(crossings), -0.5, len(crossings)-0.5, 100, 3.23, 3.33)
+    hist = TH2F('hist', '', len(crossings), -0.5, len(crossings)-0.5, 100, 8.39, 8.61)
     for i, bx in enumerate(crossings):
         hist.GetXaxis().SetBinLabel(i+1, bx)
     canvas = TCanvas('c_'+multi.GetName(), '', 600, 600)
     hist.Draw('AXIS')
     multi.Draw('P')
     canvas.Update()
+    hist.GetXaxis().SetTitle('bcid')
     hist.GetXaxis().SetLabelSize(0.035)
     hist.GetXaxis().SetNdivisions(len(crossings), False)
     hist.GetYaxis().SetTitle('#sigma_{vis} [b]')
     hist.GetYaxis().SetLabelSize(0.025)
     hist.GetYaxis().SetTitleOffset(1.3)
-    leg = TLegend(0.15, 0.82, 0.85, 0.85)
-    leg.SetNColumns((len(shapes)+1)/2)
+    leg = TLegend(0.15, 0.79, 0.85, 0.85)
+    leg.SetNColumns(3)
     leg.SetBorderSize(0)
     for i, shape in enumerate([''] + list(shapes)):
         entry = leg.AddEntry('ge'+shape, shapeNames[shape], 'P')
@@ -300,13 +301,13 @@ def correctedCrossSectionsPlot(crossings, shapes, overDiff):
     canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.C')
 
 def summaryPlots(crossings, shapes):
-    chiSq, dof = computeChiSquares(crossings, shapes)
+    #chiSq, dof = computeChiSquares(crossings, shapes)
     overDiff = gatherFromToys(crossings, shapes)
-    residualPlots(crossings, shapes, chiSq, dof)
-    radialResidualPlots(crossings, shapes, chiSq, dof)
-    chiSqPlot(crossings, shapes, chiSq, dof)
-    correctionPlot(crossings, shapes, overDiff)
-    exampleDataPlot('41', 'DG', 'X1')
+    #residualPlots(crossings, shapes, chiSq, dof)
+    #radialResidualPlots(crossings, shapes, chiSq, dof)
+    #chiSqPlot(crossings, shapes, chiSq, dof)
+    #correctionPlot(crossings, shapes, overDiff)
+    #exampleDataPlot('41', 'DG', 'X1')
     correctedCrossSectionsPlot(crossings, ('DG','TG','SupG','SupDG'), overDiff)
 
 if __name__ == '__main__':
