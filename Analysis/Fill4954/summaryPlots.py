@@ -248,11 +248,12 @@ def correctionPlot(crossings, shapes, overDiff):
     canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.C')
 
 def correctedCrossSectionsPlot(crossings, shapes, overDiff):
-    uncorrected = {41: (3.2575816286, 0.00514858611944), \
-                   281: (3.26316215713, 0.00468789412223), \
-                   872: (3.27340775031, 0.00484925398906), \
-                   1783: (3.24986926821, 0.00460908436455), \
-                   2063: (3.26363843728, 0.0044071069983)}
+    corrected = {872: (8.54289276039, 0.0137922624502),
+                 41: (8.50036326439, 0.014871741971),
+                 1783: (8.48844322212, 0.0131713546374),
+                 2063: (8.51143223151, 0.0126658247512),
+                 281: (8.51997600318, 0.0133756461666)}
+    uncorrected = {bx: (a/1.008,b/1.008) for bx, (a,b) in corrected.iteritems()}
     multi = TMultiGraph('sigmavis', '')
     graphs = []
     n = len(shapes) + 1
@@ -285,7 +286,7 @@ def correctedCrossSectionsPlot(crossings, shapes, overDiff):
     hist.GetYaxis().SetLabelSize(0.025)
     hist.GetYaxis().SetTitleOffset(1.3)
     leg = TLegend(0.15, 0.82, 0.85, 0.85)
-    leg.SetNColumns(len(shapes)+1)
+    leg.SetNColumns((len(shapes)+1)/2)
     leg.SetBorderSize(0)
     for i, shape in enumerate([''] + list(shapes)):
         entry = leg.AddEntry('ge'+shape, shapeNames[shape], 'P')
