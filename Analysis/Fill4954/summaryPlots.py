@@ -80,7 +80,7 @@ def residualPlots(crossings, shapes, chiSq, dof):
                 redChiSq = chiSq[shape][bx] / dof[shape][bx]
                 pave.AddText('#chi^{2}/d.o.f. = %6.4f'%(redChiSq))
                 pave.Draw('same')
-                drawCMS()
+                drawCMS(wip=True)
                 canvas.Modified()
                 canvas.Update()
                 canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.pdf')
@@ -298,7 +298,7 @@ def correctedCrossSectionsPlot(crossings, shapes, overDiff):
         entry.SetMarkerStyle(20)
         entry.SetMarkerColor(1+i)
     leg.Draw()
-    drawCMS()
+    drawCMS(wip=True)
     canvas.Modified()
     canvas.Update()
     canvas.SaveAs('summaryPlots/'+canvas.GetName()+'.pdf')
@@ -306,13 +306,13 @@ def correctedCrossSectionsPlot(crossings, shapes, overDiff):
 
 def summaryPlots(crossings, shapes):
     chiSq, dof = computeChiSquares(crossings, ['noCorr'])
-    #overDiff = gatherFromToys(crossings, shapes)
+    overDiff = gatherFromToys(crossings, shapes)
     residualPlots(crossings, ['noCorr'], chiSq, dof)
     #radialResidualPlots(crossings, shapes, chiSq, dof)
     #chiSqPlot(crossings, shapes, chiSq, dof)
     #correctionPlot(crossings, shapes, overDiff)
     #exampleDataPlot('41', 'DG', 'X1')
-    #correctedCrossSectionsPlot(crossings, ('DG','TG','SupG','SupDG'), overDiff)
+    correctedCrossSectionsPlot(crossings, ('DG','TG','SupG','SupDG'), overDiff)
 
 if __name__ == '__main__':
     summaryPlots(bunchcrossings, beamshapes)
