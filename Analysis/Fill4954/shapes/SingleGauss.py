@@ -115,6 +115,11 @@ class SingleGauss:
             for name in parNames:
                 parValue[name] = random.Gaus(parValue[name], \
                                              self.computeError(name))
+                if 'rho' in name:
+                    if parValue[name] < -1.0:
+                        parValue[name] = -1.0
+                    elif parValue[name] > 1.0:
+                        parValue[name] = 1.0
         for i, name in enumerate(parNames, start=4):
             multBeam.SetParameter(i, parValue[name])
         return multBeam

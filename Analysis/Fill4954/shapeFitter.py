@@ -51,15 +51,18 @@ def shapeFitter(model, bcid, datafile, prefix, suffix, vtxres, scaling):
             listOfHists.append(writeToHist(num, par+label))
     listOfHists.append(writeToHist(multBeam.Integral(-30, 30, -30, 30), \
                        'overlapInt'))
-    integ = TH1F('h_integ', 'Overlap Distribution', 1000, 0.0, 1.0)
-    rand = TRandom3()
-    rand.SetSeed(0)
-    for k in range(1000):
-        multBeam = model.assignToOverlap(multBeam, random=rand)
-        val = multBeam.Integral(-30, 30, -30, 30)
-        print val
-        integ.Fill(val)
-    listOfHists.append(integ)
+    try:
+        integ = TH1F('h_integ', 'Overlap Distribution', 1000, 0.0, 1.0)
+        rand = TRandom3()
+        rand.SetSeed(0)
+        for k in range(1000):
+            multBeam = model.assignToOverlap(multBeam, random=rand)
+            val = multBeam.Integral(-30, 30, -30, 30)
+            print val
+            integ.Fill(val)
+        listOfHists.append(integ)
+    except:
+        print 'Error in random variations'
 
     nbins = 5 * 19
     hmodel = [modelFunctions[j].createHistogram('hmodel'+c+i, \
