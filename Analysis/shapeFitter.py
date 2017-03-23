@@ -1,15 +1,12 @@
-from ROOT import gSystem, gStyle, TFile, RooAbsReal, RooDataHist, RooArgList, \
-                 RooCategory, RooSimultaneous, RooArgSet, RooFit, TH1F, TH2D, \
-                 TRandom3
+def shapeFitter(model, bcid, datafile, prefix, suffix, vtxres, scaling, nbins):
+    from ROOT import gSystem, gStyle, TFile, RooAbsReal, RooDataHist, \
+                     RooArgList, RooCategory, RooSimultaneous, RooArgSet, \
+                     RooFit, TH1F, TH2D, TRandom3
+    from os import mkdir
+    from os.path import exists
 
-def writeToHist(num, label):
-    hist = TH1F('h_'+label, label, 100, num-1.0, num+1.0)
-    hist.Fill(num)
-    return hist
-
-def shapeFitter(model, bcid, datafile, prefix, suffix, vtxres, scaling):
     for template in model.Templates:
-        gSystem.Load('../../beamdensities/'+template+'.so')
+        gSystem.Load('../beamdensities/'+template+'.so')
     gStyle.SetOptStat(0)
     name = prefix + '_' + model.Shortname + '_' + bcid + '_' + suffix
 
@@ -40,6 +37,11 @@ def shapeFitter(model, bcid, datafile, prefix, suffix, vtxres, scaling):
     result = simPdf.fitTo(combData, RooFit.PrintLevel(3), RooFit.Verbose(1), \
                           RooFit.Save())
 
+    def writeToHist(num, label):
+        hist = TH1F('h_'+label, label, 100, num-1.0, num+1.0)
+        hist.Fill(num)
+        return hist
+
     multBeam = model.funcOverlap()
     listOfHists = []
     for par in model.Parameter:
@@ -64,7 +66,6 @@ def shapeFitter(model, bcid, datafile, prefix, suffix, vtxres, scaling):
     except:
         print 'Error in random variations'
 
-    nbins = 5 * 19
     hmodel = [modelFunctions[j].createHistogram('hmodel'+c+i, \
               model.xVar(), RooFit.Binning(nbins), RooFit.YVar(model.yVar(), \
               RooFit.Binning(nbins))) for j, (i,c) in enumerate(ic)]
@@ -101,9 +102,62 @@ def shapeFitter(model, bcid, datafile, prefix, suffix, vtxres, scaling):
     for hist in hmodel + hdata + scRes + scDat + scMod:
         listOfHists.append(hist)
 
-    outputfile = TFile(name+'.root', 'RECREATE')
+    if not exists('results'):
+        mkdir('results')
+    outputfile = TFile('results/'+name+'.root', 'RECREATE')
     for hist in listOfHists:
         hist.Write()
     result.Write('fitResult')
     outputfile.Write()
     outputfile.Close()
+
+def main():
+    from sys import argv as __ARGV__
+    __ARGV__.append('-b')
+
+    from argparse import ArgumentParser
+    from json import load as decode
+
+    parser = ArgumentParser(description='Fit Beam Imaging results')
+    parser.add_argument('-b', action='store_true', help='enable batch mode')
+    parser.add_argument('-j', '--json', required=True, help='specify JSON '+ \
+                        'file containing config information')
+    parser.add_argument('-m', '--model', required=True, choices=['SingleGauss', \
+                        'SingleGaussUncorrelated', 'DoubleGauss', 'SuperGauss', \
+                        'TripleGauss', 'SuperDoubleGauss'], help='specify '+ \
+                        'fit model')
+    parser.add_argument('-c', '--bcid', required=True, nargs='+', \
+                        choices=['41', '281', '872', '1783', '2063'], \
+                        help='list one or more bunch crossings')
+    parser.add_argument('-r', '--vtxres', nargs='+', choices=['default', 'low', \
+                        'high', 'half', 'double'], default=False, help= \
+                        'specify one or more options to modify vertex '+ \
+                        'resolution')
+    args = parser.parse_args()
+
+    with open(args.json[0]) as f:
+        json = decode(f)
+    datafile = str(json['datapath']) + '/' + str(json['prefix']) + '_' + \
+               str(json['suffix']) + '.root'
+    prefix = str(json['prefix'])
+    suffix = str(json['suffix']) + '_'
+    vtxres = float(json['vtxres'])
+    scaling = float(json['scaling'])
+    nbins = int(json['nbins'])
+
+    from shapeFitter import shapeFitter
+    from shapes.SingleGauss import SingleGauss, SingleGaussUncorrelated
+    from shapes.DoubleGauss import DoubleGauss, SuperGauss
+    from shapes.TripleGauss import TripleGauss, SuperDoubleGauss
+    model = locals()[args.model]()
+
+    factors = {'default': 1.0, 'low': 0.9, 'high': 1.1, 'half': 0.5, \
+               'double': 2.0}
+    for bcid in args.bcid:
+        for option in args.vtxres:
+            res = vtxres * factors[args.vtxres]
+            sfx = suffix + args.vtxres
+            shapeFitter(model, bcid, datafile, prefix, sfx, res, scaling, nbins)
+
+if __name__ == '__main__':
+    main()
