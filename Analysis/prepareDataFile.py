@@ -6,10 +6,11 @@ def prepareDataFile(listfile, times, minTrk, nbins, bcids, scaling, offsetx, \
     from os.path import exists
     from ROOT import TChain, TH1F, TH2F, TFile
 
-    chain = TChain('lumi/tree')
-    with open(listfile) as f:
-        for line in f:
-            chain.Add(line.strip())
+    chain = {name: TChain('lumi/tree') for name in listfile}
+    for name, filename in listfile.iteritems():
+        with open(filename) as f:
+            for line in f:
+                chain[name].Add(line.strip())
 
     values = {name: array(t, v) for (name, t, v) in [ \
               ('bunchCrossing', 'i', [0]), \
@@ -91,7 +92,8 @@ def main():
 
     with open(args.json[0]) as f:
         json = decode(f)
-    listfile = 'filelist/' + str(json['prefix']) + '.txt'
+    listfile = {name: 'filelist/'+str(json['prefix'])+'_'+name+'.txt' for \
+                name in ['1X', '1Y', '2X', '2Y']}
     times = [json[name] for name in json if \
              match('^scan[12][XY]Move(Begin|End)$', name)]
     minTrk = int(json['minTrk'])
