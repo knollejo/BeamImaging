@@ -158,21 +158,21 @@ void overlapDiff_DG(TString suffix)
     TH2F *weight1N_error_h=(TH2F*) f->Get("weight1N_error_h");
     TH2F *weight2N_error_h=(TH2F*) f->Get("weight2N_error_h");
 
-    in_yWidth1N = ywidth1N_h->GetMean();
-    in_xWidth1N = xwidth1N_h->GetMean();
-    in_corr1N = rho1N_h->GetMean();
-    in_yWidth1W = ywidth1W_h->GetMean();
-    in_xWidth1W = xwidth1W_h->GetMean();
-    in_corr1W =rho1W_h->GetMean();
-    in_weight1N =weight1N_h->GetMean();
+    double in_yWidth1N = ywidth1N_h->GetMean();
+    double in_xWidth1N = xwidth1N_h->GetMean();
+    double in_corr1N = rho1N_h->GetMean();
+    double in_yWidth1W = ywidth1W_h->GetMean();
+    double in_xWidth1W = xwidth1W_h->GetMean();
+    double in_corr1W =rho1W_h->GetMean();
+    double in_weight1N =weight1N_h->GetMean();
 
-    in_yWidth2N = ywidth2N_h->GetMean();
-    in_xWidth2N = xwidth2N_h->GetMean();
-    in_corr2N = rho2N_h->GetMean();
-    in_yWidth2W = ywidth2W_h->GetMean();
-    in_xWidth2W = xwidth2W_h->GetMean();
-    in_corr2W =rho2W_h->GetMean();
-    in_weight2N =weight2N_h->GetMean();
+    double in_yWidth2N = ywidth2N_h->GetMean();
+    double in_xWidth2N = xwidth2N_h->GetMean();
+    double in_corr2N = rho2N_h->GetMean();
+    double in_yWidth2W = ywidth2W_h->GetMean();
+    double in_xWidth2W = xwidth2W_h->GetMean();
+    double in_corr2W =rho2W_h->GetMean();
+    double in_weight2N =weight2N_h->GetMean();
 
     double in_yWidth1N_error = ywidth1N_error_h->GetMean();
     double in_xWidth1N_error = xwidth1N_error_h->GetMean();
