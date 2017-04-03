@@ -15,13 +15,10 @@ def prepareFileList(directories, outputname, times):
                 continue
             try:
                 f = TFile(directory+'/'+filename)
-                print f
                 t = f.Get('lumi/tree')
-                print t
-                for name, (bg, ed) in times:
+                for name, (bg, ed) in times.iteritems():
                     n = t.GetEntries('timeStamp_begin>'+str(bg)+' && '+ \
                                     'timeStamp_end<'+str(ed))
-                    print n
                     if n > 0:
                         files[name].append(directory+'/'+filename)
             except:
