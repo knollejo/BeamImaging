@@ -18,9 +18,11 @@ def prepareFileList(directories, outputname, times):
                 t = f.Get('lumi/tree')
                 for name, (bg, ed) in times.iteritems():
                     n = t.GetEntries('timeStamp_begin>'+str(bg)+' && '+ \
-                                    'timeStamp_end<'+str(ed))
+                                    'timeStamp_begin<'+str(ed))
                     if n > 0:
                         files[name].append(directory+'/'+filename)
+            except KeyboardInterrupt:
+                raise
             except:
                 continue
     if not exists('filelist'):
@@ -47,7 +49,7 @@ def main():
     json = loadJson(args.json[0])
     name = str(json['prefix'])
     directories = [json['sourcepath']+'/'+d for d in json['sourcedirectories']]
-    times = {name[4:6]: (json[name][0], json[name[0:10]+'End'][-1]) for name \
+    times = {name[4:6]: (json[name][0], json[name][-1]+30) for name \
              in json if match('^scan[12][XY]MoveBegin$', name)}
     prepareFileList(directories, name, times)
 
