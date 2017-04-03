@@ -42,6 +42,7 @@ def plotOtherCoordinate(datafile, crossings, scans):
                 stepVal = array('d', [1.0*a for a in range(1,20)])
                 stepErr = array('d', 19*[0.0])
                 for i in range(1,20):
+                    print '<<< Accessings histogram:', 'scan'+coord+scan+'Move_b'+bx+'_'+str(i)
                     hist = f.Get('scan'+coord+scan+'Move_b'+bx+'_'+str(i))
                     funcGaus = TF1('funcGaus'+coord+scan, 'gaus', -10, 10)
                     getattr(hist, 'Projection'+other)().Fit('funcGaus'+coord+scan)

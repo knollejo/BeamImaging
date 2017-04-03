@@ -78,8 +78,8 @@ def prepareDataFile(listfile, times, minTrk, nbins, bcids, scaling, offsetx, \
                     continue
                 histos['xError'].Fill(values['vtx_xError'][j])
                 histos['yError'].Fill(values['vtx_yError'][j])
-                xVtx = (values['vtx_x'][j] + offsetx) / scaling
-                yVtx = (values['vtx_y'][j] + offsety) / scaling
+                xVtx = values['vtx_x'][j] / scaling + offsetx
+                yVtx = values['vtx_y'][j] / scaling + offsety
                 for begin, end in times[name]:
                     if values['timeStamp_begin'][0] < begin:
                         continue
@@ -112,7 +112,7 @@ def main():
     parser.add_argument('-b', action='store_true', help='enable batch mode')
     parser.add_argument('json', nargs=1, help='specify JSON file containing '+ \
                         'config information')
-    parser.add_argument('-p', '--preliminary', action='store_true', help='run'+ \
+    parser.add_argument('-p', '--preliminary', action='store_true', help='run '+ \
                         'only on 1/80 of data')
     args = parser.parse_args()
 
