@@ -25,8 +25,9 @@ def prepareDataFile(listfile, times, minTrk, nbins, bcids, scaling, offsetx, \
               ('vtx_isFake', 'b', [0]*200), \
               ('timeStamp_begin', 'I', [0]), \
               ('timeStamp_end', 'I', [0])]}
-    for name in values:
-        chain.SetBranchAddress(name, values[name])
+    for ch in chain.itervalues():
+        for field in values:
+            ch.SetBranchAddress(field, values[field])
 
     histos = {c+'Error': TH1F(c+'Error_hist', c+'Error_hist', 1000, 0.0, 0.1) \
               for c in ['x', 'y']}
@@ -36,36 +37,36 @@ def prepareDataFile(listfile, times, minTrk, nbins, bcids, scaling, offsetx, \
                    10.0) for name in [moveName(i, c, b) for i in ['1', '2'] \
                    for c in ['X', 'Y'] for b in bcids]})
 
-    nEntries = chain.GetEntries()
-    print '<<< Start to process', nEntries, 'events'
-    for i in range(nEntries):
-        if i % 10000 == 0:
-            print '<<< Now at event', i
-        chain.GetEntry(i)
-        if values['nVtx'][0] <= 0:
-            continue
-        if not str(values['bunchCrossing']) in bcids:
-            continue
-        for j in range(values['nVtx'][0]):
-            if not values['vtx_isGood'][j]:
+    for name, ch in chain.iteritems():
+        nEntries = ch.GetEntries()
+        print '<<< Start to process', name, 'with', nEntries, 'events'
+        for i in range(nEntries):
+            if i % 10000 == 0:
+                print '<<< Now at event', i
+            ch.GetEntry(i)
+            if values['nVtx'][0] <= 0:
                 continue
-            if values['vtx_isFake'][j]:
+            if not str(values['bunchCrossing']) in bcids:
                 continue
-            if values['vtx_nTrk'][j] <= minTrk:
-                continue
-            histos['xError'].Fill(values['vtx_xError'][j])
-            histos['yError'].Fill(values['vtx_yError'][j])
-            xVtx = (values['vtx_x'][j] + offsetx) / scaling
-            yVtx = (values['vtx_y'][j] + offsety) / scaling
-            for (i, c) in product(['1', '2'], ['X', 'Y']):
-                for begin, end in zip(times['Scan'+i+c+'MoveBegin'], \
-                                      times['Scan'+i+c+'MoveEnd']):
+            for j in range(values['nVtx'][0]):
+                if not values['vtx_isGood'][j]:
+                    continue
+                if values['vtx_isFake'][j]:
+                    continue
+                if values['vtx_nTrk'][j] <= minTrk:
+                    continue
+                histos['xError'].Fill(values['vtx_xError'][j])
+                histos['yError'].Fill(values['vtx_yError'][j])
+                xVtx = (values['vtx_x'][j] + offsetx) / scaling
+                yVtx = (values['vtx_y'][j] + offsety) / scaling
+                for begin, end in zip(times['Scan'+name+'MoveBegin'], \
+                                      times['Scan'+name+'MoveEnd']):
                     if values['timeStamp_begin'] < begin:
                         continue
                     if values['timeStamp_end'] > end:
                         continue
-                    histos[moveName(i, c, str(values['bunchCrossing']))]. \
-                          Fill(xVtx, yVtx)
+                    histos[moveName(name[0], name[1], \
+                           str(values['bunchCrossing']))].Fill(xVtx, yVtx)
 
     if not exists(outputpath):
         mkdir(outputpath)
