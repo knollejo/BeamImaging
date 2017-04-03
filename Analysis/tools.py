@@ -3,6 +3,8 @@ def loadJson(filename):
     result = {}
     nextfile = filename
     while nextfile:
+        if 'include' in result:
+            result.pop('include')
         with open(nextfile) as f:
             json = load(f)
         json.update(result)

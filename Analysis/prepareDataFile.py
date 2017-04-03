@@ -41,8 +41,9 @@ def prepareDataFile(listfile, times, minTrk, nbins, bcids, scaling, offsetx, \
         nEntries = ch.GetEntries()
         print '<<< Start to process', name, 'with', nEntries, 'events'
         for i in range(nEntries):
-            if i % 10000 == 0:
-                print '<<< Now at event', i
+            if i % 100000 == 0:
+                print '<<< Now at event', i, \
+                      '({:0=2.0f}%'.format(i*100.0/nEntries), 'of', name+')'
             ch.GetEntry(i)
             if values['nVtx'][0] <= 0:
                 continue
@@ -71,7 +72,7 @@ def prepareDataFile(listfile, times, minTrk, nbins, bcids, scaling, offsetx, \
     if not exists(outputpath):
         mkdir(outputpath)
     outputfile = TFile(outputpath+'/'+outputname+'.root', 'RECREATE')
-    for hist in histos:
+    for hist in histos.itervalues():
         hist.Write()
     outputfile.Write()
     outputfile.Close()
