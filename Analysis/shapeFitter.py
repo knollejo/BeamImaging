@@ -115,8 +115,8 @@ def main():
     from sys import argv as __ARGV__
     __ARGV__.append('-b')
 
+    from tools import loadJson
     from argparse import ArgumentParser
-    from json import load as decode
 
     parser = ArgumentParser(description='Fit Beam Imaging results')
     parser.add_argument('-b', action='store_true', help='enable batch mode')
@@ -135,8 +135,7 @@ def main():
                         'resolution')
     args = parser.parse_args()
 
-    with open(args.json[0]) as f:
-        json = decode(f)
+    json = loadJson(args.json[0])
     datafile = str(json['datapath']) + '/' + str(json['prefix']) + '_' + \
                str(json['suffix']) + '.root'
     prefix = str(json['prefix'])

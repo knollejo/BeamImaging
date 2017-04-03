@@ -34,8 +34,8 @@ def main():
     from sys import argv as __ARGV__
     __ARGV__.append('-b')
 
+    from tools import loadJson
     from argparse import ArgumentParser
-    from json import load as decode
     from re import match
 
     parser = ArgumentParser(description='Make list of ROOT files')
@@ -44,13 +44,11 @@ def main():
                         'config information')
     args = parser.parse_args()
 
-    with open(args.json[0]) as f:
-        json = decode(f)
+    json = loadJson(args.json[0])
     name = str(json['prefix'])
     directories = [json['sourcepath']+'/'+d for d in json['sourcedirectories']]
     times = {name[4:6]: (json[name][0], json[name[0:10]+'End'][-1]) for name \
              in json if match('^scan[12][XY]MoveBegin$', name)}
-    print times
     prepareFileList(directories, name, times)
 
 if __name__ == '__main__':

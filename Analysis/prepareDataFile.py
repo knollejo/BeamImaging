@@ -79,8 +79,8 @@ def main():
     from sys import argv as __ARGV__
     __ARGV__.append('-b')
 
+    from tools import loadJson
     from argparse import ArgumentParser
-    from json import load as decode
     from re import match
 
     parser = ArgumentParser(description='Extract Beam Imaging data from ROOT '+ \
@@ -90,12 +90,11 @@ def main():
                         'config information')
     args = parser.parse_args()
 
-    with open(args.json[0]) as f:
-        json = decode(f)
+    json = loadJson(args.json[0])
     listfile = {name: 'filelist/'+str(json['prefix'])+'_'+name+'.txt' for \
                 name in ['1X', '1Y', '2X', '2Y']}
-    times = [json[name] for name in json if \
-             match('^scan[12][XY]Move(Begin|End)$', name)]
+    times = {name: json[name] for name in json if \
+             match('^scan[12][XY]Move(Begin|End)$', name)}
     minTrk = int(json['minTrk'])
     nbins = int(json['nbins'])
     bcids = [str(bx) for bx in json['bunchCrossings']]
